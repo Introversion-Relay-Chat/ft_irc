@@ -1,14 +1,12 @@
 #include "IRC.hpp"
 
-void ft::error(std::string message, bool stop)
-{
+void ft::error(std::string message, bool stop) {
 	std::cerr << "error: " << message << std::endl;
 	if (stop)
 		exit(EXIT_FAILURE);
 }
 
-std::vector<std::string> ft::split(std::string str, std::string delimiter)
-{
+std::vector<std::string> ft::split(std::string str, std::string delimiter) {
 	std::vector<std::string>	splitted;
 	std::string					tmp;
 	size_t 						pos;
@@ -23,4 +21,9 @@ std::vector<std::string> ft::split(std::string str, std::string delimiter)
 	if (str.length())
 		splitted.push_back(str);
 	return splitted;
+}
+
+
+std::string ft::join(std::string sender_prefix, std::string code, std::string target, std::string message) {
+	return ":" + sender_prefix + " " + code + " " + target + " " + message;
 }
