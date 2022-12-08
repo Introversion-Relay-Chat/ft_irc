@@ -15,14 +15,14 @@ std::string ft::ERR_ALREADYREGISTRED(void) {
 	return ":You may not reregister" ;
 }
 
-std::string ft::NumericReply(std::string code, const ft::Message &message, ft::User *user) {
+std::string ft::NumericReply(std::string sender_prefix, std::string code, std::string target, const ft::Message &message) {
 	switch (atoi(code.c_str())) {
 		case 421:
-			return ":" + user->getNickname() + " 421 " + ft::ERR_UNKNOWNCOMMAND(message.command);
+			return ft::join(sender_prefix, code, target, ft::ERR_UNKNOWNCOMMAND(message.command));
 		case 461:
-			return ":" + user->getNickname() + " 461 " + ft::ERR_NEEDMOREPARAMS(message.command);
+			return ft::join(sender_prefix, code, target, ft::ERR_NEEDMOREPARAMS(message.command));
 		case 462:
-			return ":" + user->getNickname() + " 462 " + ft::ERR_ALREADYREGISTRED();
+			return ft::join(sender_prefix, code, target, ft::ERR_ALREADYREGISTRED());
 		default:
 			return std::string();
 	}

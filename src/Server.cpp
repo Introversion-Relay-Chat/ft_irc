@@ -1,17 +1,23 @@
 #include "IRC.hpp"
 
-ft::Server::Server(std::string	port, std::string password) {
+ft::Server::Server(std::string port, std::string password) {
 	_password = password;
 	_port = atoi(port.c_str());
 	_executor[std::string("PASS")] = PASS;
+	_servername = SERVER_NAME;
 }
 
 ft::Server::~Server() {
 	_users.clear();
+	_channels.clear();
 }
 
 std::string ft::Server::getPassword(void) {
 	return _password;
+}
+
+std::string ft::Server::getServername(void) {
+	return _servername;
 }
 
 void ft::Server::run(bool &stop) {
@@ -62,7 +68,8 @@ void ft::Server::acceptNewUser(void) {
 	user_socket = accept(_server_socket, (struct sockaddr *)&address, &addrlen);
 	if (user_socket == -1)
 		return ;
-	_users[user_socket] = new User(user_socket);
+
+	_users[user_socket] = new User(user_socket, std::string(inet_ntoa(address.sin_addr)), this);
 
 	_sockets.push_back(pollfd());
 	_sockets.back().fd = user_socket;
@@ -115,9 +122,9 @@ void ft::Server::runCommand(const ft::Message &message, User *user) {
 	std::string	reply;
 
 	if (_executor.find(message.command) != _executor.end())
-		reply = _executor[message.command](message, user, this);
+		reply = _executor[message.command](message, user) + std::string(MESSAGE_END);
 	else
-		reply = NumericReply("421", message, user);
+		reply = NumericReply(user->getServer()->getServername(), "421", user->getNickname(), message) + std::string(MESSAGE_END);
 	if (reply.length())
 		if (send(user->_user_socket, reply.c_str(), reply.length(), 0) == -1)
 			error("send", false);
