@@ -20,6 +20,10 @@ std::string Server::getServername(void) {
 	return _servername;
 }
 
+std::map<int, User *> Server::getUsers(void) {
+	return _users;
+}
+
 void Server::run(bool &stop) {
 	int enable = 1;
 	if ((_server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
