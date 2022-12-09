@@ -1,5 +1,30 @@
 #include "Utils.hpp"
 
+// 331
+std::string RPL_NOTOPIC(const std::string &channel) {
+	return channel + " :No topic is set";
+}
+
+// 332
+std::string RPL_TOPIC(const std::string &channel, const std::string &topic) {
+	return channel + " :" + topic;
+}
+
+// 353
+std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist) {
+	return channel + " :" + userlist;
+}
+
+// 403
+std::string ERR_NOSUCHCHANNEL(const std::string &channel) {
+	return channel + " :No such channel";
+}
+
+// 405
+std::string ERR_TOOMANYCHANNELS(const std::string &channel) {
+	return channel + " :You have joined too many channels";
+}
+
 // 421
 std::string ERR_UNKNOWNCOMMAND(const std::string &command) {
 	return command + " :Unknown command" ;

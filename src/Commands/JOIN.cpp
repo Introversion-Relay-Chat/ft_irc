@@ -12,7 +12,7 @@ std::string JOIN(const Message &message, User *sender) {
 	std::set<int>						channel_users;
 	std::map<int, User *>				server_users;
 	std::string							topic;
-	std::string							nicknames;
+	std::string							userlist;
 
 	// ERR_NEEDMOREPARAMS
 	if (message.middle.size() < 1)
@@ -84,11 +84,11 @@ std::string JOIN(const Message &message, User *sender) {
 		server_users = sender->getServer()->getUsers();
     	for (std::set<int>::iterator user=channel_users.begin(); user != channel_users.end(); user++) {
 			if (*user == channel->getOperator())
-				nicknames += "@" + server_users[*user]->getNickname() + " ";
+				userlist += "@" + server_users[*user]->getNickname() + " ";
 			else
-				nicknames += server_users[*user]->getNickname() + " ";
+				userlist += server_users[*user]->getNickname() + " ";
 		}
-		sender->getServer()->sendMsg(join(sender_prefix, "353", target, RPL_NAMREPLY(channels[i], nicknames)), sender);
+		sender->getServer()->sendMsg(join(sender_prefix, "353", target, RPL_NAMREPLY(channels[i], userlist)), sender);
 	}
 
 	return std::string();
