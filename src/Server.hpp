@@ -27,6 +27,7 @@ class Server {
 
 		std::string	getPassword(void);
 		std::string getServername(void);
+		std::map<int, User *> getUsers(void);
 
 		void		run(bool &stop);
 		void		loop(void);

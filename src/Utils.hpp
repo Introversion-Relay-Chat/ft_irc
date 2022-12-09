@@ -19,7 +19,7 @@
 # include "Channel.hpp"
 
 # define BUFFER_SIZE	4096
-# define MESSAGE_END	"\n"
+# define MESSAGE_END	"\r\n"
 # define SERVER_NAME	"tmp.server.name"
 
 # define FLAG_CHANNEL_O	1
@@ -36,9 +36,10 @@
 
 // User Status
 enum UserStatus {
-	PASSWORD,
-	REGISTER,
-	ONLINE,
+	NEED_PASSWORD,
+	NEED_NICKNAME,
+	NEED_USERREGISTER,
+	REGISTERED,
 	DELETE
 };
 
@@ -56,6 +57,8 @@ std::string					join(std::string sender_prefix, std::string code, std::string ta
 
 // Commands
 std::string PASS(const Message &message, User *sender);
+std::string NICK(const Message &message, User *sender);
+std::string USER(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);

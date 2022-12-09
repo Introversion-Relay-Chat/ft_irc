@@ -4,6 +4,8 @@ Server::Server(std::string port, std::string password) {
 	_password = password;
 	_port = atoi(port.c_str());
 	_executor[std::string("PASS")] = PASS;
+	_executor[std::string("NICK")] = NICK;
+	_executor[std::string("USER")] = USER;
 	_servername = SERVER_NAME;
 }
 
@@ -18,6 +20,10 @@ std::string Server::getPassword(void) {
 
 std::string Server::getServername(void) {
 	return _servername;
+}
+
+std::map<int, User *> Server::getUsers(void) {
+	return _users;
 }
 
 void Server::run(bool &stop) {
@@ -125,6 +131,9 @@ void Server::runCommand(const Message &message, User *user) {
 		reply = _executor[message.command](message, user) + std::string(MESSAGE_END);
 	else
 		reply = join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)) + std::string(MESSAGE_END);
+	if (user->getStatus() == REGISTERED) {
+		std::cout << user->getNickname() << " registered!" << std::endl;
+	}
 	if (reply.length())
 		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
 			error("send", false);
