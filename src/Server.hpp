@@ -3,9 +3,9 @@
 
 #include "Utils.hpp"
 
-class User;
-class Channel;
-struct Message;
+class	User;
+class	Channel;
+struct	Message;
 
 class Server {
 
@@ -39,7 +39,8 @@ class Server {
 		void		sendMsg(const std::string &message, User *user);
 
 		void		createChannel(std::string channel_name, User *user);
-
+		void		deleteChannel(std::string channel_name);
+		
 };
 
 #endif

@@ -1,12 +1,15 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-#include "Utils.hpp"
+# include "Utils.hpp"
+
+class	Server;
+class	User;
+struct	Message;
 
 class Channel {
 
 	private:
-		Server					*_server;
 		std::string				_channelname;
 		std::string				_topic;
 		std::string				_key;

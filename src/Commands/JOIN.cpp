@@ -1,11 +1,7 @@
 #include "../Utils.hpp"
-#include "../User.hpp"
 
-/*
-NEED TO ADD std::set<int> banlist = channel->getBanlist();
-*/
-std::string JOIN(const Message &message, User *sender)
-{
+// TODO: server name rule, banmask related job;
+std::string JOIN(const Message &message, User *sender) {
 	std::string							sender_prefix = sender->getServerPrefix();
 	std::string							target = sender->getNickname();
 	std::vector<std::string>			channels;
@@ -34,23 +30,28 @@ std::string JOIN(const Message &message, User *sender)
 		// create channel if doesnt exist
 		if (!channel) {
 			// ERR_TOOMANYCHANNELS
-			if (all_channels.size() == MAX_CHANNEL)
+			if (all_channels.size() == MAX_CHANNEL) {
 				return join(sender_prefix, "405", target, ERR_TOOMANYCHANNELS(channels[i]));
+			}
 			else {
 				sender->getServer()->createChannel(channels[i], sender);
+				all_channels = sender->getServer()->getChannels();
 				channel = all_channels[channels[i]];
 			}
 		}
 		// ERR_CHANNELISFULL
-		if (static_cast<int>(channel->getUsers().size()) >= channel->getLimit())
+		if (static_cast<int>(channel->getUsers().size()) >= channel->getLimit()) {
 			return join(sender_prefix, "471", target, ERR_CHANNELISFULL(channels[i]));
+		}
 
 		// 1. invite-only
 		// ERR_INVITEONLYCHAN
 		invited = channel->getInvited();
-		if (channel->getMode() & FLAG_CHANNEL_I)
-			if (invited.find(sender->getUserSocket()) == invited.end())
+		if (channel->getMode() & FLAG_CHANNEL_I) {
+			if (invited.find(sender->getUserSocket()) == invited.end()) {
 				return join(sender_prefix, "473", target, ERR_INVITEONLYCHAN(channels[i]));
+			}
+		}
 		
 		/*
 		// 2. nick/username/hostname not in active bans.

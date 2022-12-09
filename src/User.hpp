@@ -3,8 +3,9 @@
 
 #include "Utils.hpp"
 
-class Server;
-struct Message;
+class	Server;
+class	Channel;
+struct	Message;
 
 class User {
 

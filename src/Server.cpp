@@ -4,6 +4,8 @@ Server::Server(std::string port, std::string password) {
 	_password = password;
 	_port = atoi(port.c_str());
 	_executor[std::string("PASS")] = PASS;
+	_executor[std::string("JOIN")] = JOIN;
+	_executor[std::string("PART")] = PART;
 	_servername = SERVER_NAME;
 }
 
@@ -149,4 +151,8 @@ void Server::createChannel(std::string channel_name, User *user) {
 	Channel *new_channel = new Channel(channel_name, user);
 
 	_channels[channel_name] = new_channel;
+}
+
+void Server::deleteChannel(std::string channel_name) {
+	_channels.erase(channel_name);
 }

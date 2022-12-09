@@ -2,6 +2,8 @@
 
 Channel::Channel(std::string channelname, User *user) {
 	_channelname = channelname;
+	_topic = std::string();
+	_key = std::string();
 	_operator = user->getUserSocket();
 	_limit = 100;
 	_mode = 0;

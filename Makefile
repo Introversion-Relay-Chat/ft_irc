@@ -11,13 +11,13 @@ CHECK = \033[0;32m\xE2\x9C\x94\033[0m
 
 FUNC			=	src/main \
 					src/Server \
+					src/Channel \
 					src/User \
 					src/Utils \
 					src/NumericReplies \
 					src/Commands/PASS \
 					src/Commands/JOIN \
-
-INC = ./src/IRC.h
+					src/Commands/PART \
 
 SRC = $(addsuffix .cpp, $(FUNC))
 OBJ = $(addsuffix .o, $(FUNC))
@@ -25,10 +25,10 @@ DEP = $(addsuffix .d, $(FUNC))
 
 %.o: %.cpp
 	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
-	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
+	@$(CPP) $(CXXFLAGS) -o $@ -c $<
 
 $(NAME): $(OBJ)
-	@$(CPP) $(CXXFLAGS) -I $(INC) -o $(NAME) $(OBJ)
+	@$(CPP) $(CXXFLAGS) -o $(NAME) $(OBJ)
 	@echo "$(NAME): $(GREEN) $(NAME) was created! $(CHECK) $(RESET)"
 
 all: $(NAME)

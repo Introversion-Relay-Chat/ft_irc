@@ -57,13 +57,17 @@ std::string					join(std::string sender_prefix, std::string code, std::string ta
 
 // Commands
 std::string PASS(const Message &message, User *sender);
+std::string JOIN(const Message &message, User *sender);
+std::string PART(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_NOTOPIC(const std::string &channel);
 std::string RPL_TOPIC(const std::string &channel, const std::string &topic);
 std::string RPL_NAMREPLY(const std::string &channel, const std::string &nicknames);
+std::string ERR_NOSUCHCHANNEL(const std::string &channel);
 std::string ERR_TOOMANYCHANNELS(const std::string &channel);
 std::string ERR_UNKNOWNCOMMAND(const std::string &command);
+std::string ERR_NOTONCHANNEL(const std::string &command);
 std::string ERR_NEEDMOREPARAMS(const std::string &command);
 std::string ERR_ALREADYREGISTRED(void);
 std::string ERR_CHANNELISFULL(const std::string &channel);

@@ -15,14 +15,24 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &nickname
 	return channel + " :" + nicknames;
 }
 
+// 403
+std::string ERR_NOSUCHCHANNEL(const std::string &channel) {
+	return channel + " :No such channel";
+}
+
 // 405
 std::string ERR_TOOMANYCHANNELS(const std::string &channel) {
 	return channel + " :You have joined too many channels";
 }
 
-// 421     
+// 421
 std::string ERR_UNKNOWNCOMMAND(const std::string &command) {
 	return command + " :Unknown command" ;
+}
+
+// 442
+std::string ERR_NOTONCHANNEL(const std::string &command) {
+	return command + " :You're not on that channel" ;
 }
 
 // 461
