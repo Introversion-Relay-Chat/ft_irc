@@ -1,11 +1,12 @@
 #include "User.hpp"
 
 User::User(int user_socket, std::string hostname, Server *server) {
-	_status = PASSWORD;
+	_status = NEED_PASSWORD;
 	_user_socket = user_socket;
 	_nickname = "*";
 	_server = server;
 	_hostname = hostname;
+	_realname = "";
 }
 
 User::~User() {
@@ -34,6 +35,14 @@ std::string User::getUsername(void) {
 
 void User::setUsername(std::string username) {
 	_username = username;
+}
+
+std::string	User::getRealname(void) {
+	return _realname;
+}
+
+void		User::setRealname(std::string realname) {
+	_realname = realname;
 }
 
 Server *User::getServer(void) {

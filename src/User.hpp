@@ -15,19 +15,22 @@ class User {
 		std::string				_nickname;
 		std::string				_username;
 		std::string				_hostname;
+		std::string				_realname;
 		// int						_modes;
 		std::set<std::string>	_joined_channels;
 
 	public:
 		User(int user_socket, std::string hostname, Server *server);
 		~User();
-		
+
 		int			getStatus(void);
 		void		setStatus(int status);
 		std::string	getNickname(void);
 		void		setNickname(std::string nickname);
 		std::string	getUsername(void);
 		void		setUsername(std::string username);
+		std::string	getRealname(void);
+		void		setRealname(std::string realname);
 		Server		*getServer(void);
 		int			getUserSocket(void);
 
