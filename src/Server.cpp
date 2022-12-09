@@ -124,7 +124,7 @@ void Server::runCommand(const Message &message, User *user) {
 	if (_executor.find(message.command) != _executor.end())
 		reply = _executor[message.command](message, user) + std::string(MESSAGE_END);
 	else
-		reply = NumericReply(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)) + std::string(MESSAGE_END);
+		reply = join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)) + std::string(MESSAGE_END);
 	if (reply.length())
 		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
 			error("send", false);
