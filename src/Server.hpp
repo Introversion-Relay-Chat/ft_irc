@@ -25,8 +25,10 @@ class Server {
 		Server(std::string port, std::string password);
 		~Server();
 
-		std::string	getPassword(void);
-		std::string getServername(void);
+		std::string							getPassword(void);
+		std::string							getServername(void);
+		std::map<std::string, Channel *>	getChannels(void);
+		std::map<int, User *>				getUsers();
 
 		void		run(bool &stop);
 		void		loop(void);
@@ -34,6 +36,9 @@ class Server {
 		void		receiveMsg(int user_socket);
 		Message		parseMsg(std::string message);
 		void		runCommand(const Message &message, User *user);
+		void		sendMsg(const std::string &message, User *user);
+
+		void		createChannel(std::string channel_name, User *user);
 
 };
 

@@ -15,6 +15,7 @@ FUNC			=	src/main \
 					src/Utils \
 					src/NumericReplies \
 					src/Commands/PASS \
+					src/Commands/JOIN \
 
 INC = ./src/IRC.h
 

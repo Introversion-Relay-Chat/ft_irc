@@ -16,7 +16,7 @@ class User {
 		std::string				_username;
 		std::string				_hostname;
 		// int						_modes;
-		std::set<std::string>	_joined_channels;
+		std::set<std::string>	_joined;
 
 	public:
 		User(int user_socket, std::string hostname, Server *server);
@@ -33,6 +33,10 @@ class User {
 
 		std::string	getServerPrefix(void);
 		std::string	getUserPrefix(void);
+
+		void		joinChannel(std::string channel_name);
+		void		leaveChannel(std::string channel_name);
+
 };
 
 #endif

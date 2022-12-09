@@ -18,6 +18,7 @@
 # include "User.hpp"
 # include "Channel.hpp"
 
+# define MAX_CHANNEL	10
 # define BUFFER_SIZE	4096
 # define MESSAGE_END	"\n"
 # define SERVER_NAME	"tmp.server.name"
@@ -58,8 +59,15 @@ std::string					join(std::string sender_prefix, std::string code, std::string ta
 std::string PASS(const Message &message, User *sender);
 
 // Numeric Replies
+std::string RPL_NOTOPIC(const std::string &channel);
+std::string RPL_TOPIC(const std::string &channel, const std::string &topic);
+std::string RPL_NAMREPLY(const std::string &channel, const std::string &nicknames);
+std::string ERR_TOOMANYCHANNELS(const std::string &channel);
 std::string ERR_UNKNOWNCOMMAND(const std::string &command);
 std::string ERR_NEEDMOREPARAMS(const std::string &command);
 std::string ERR_ALREADYREGISTRED(void);
+std::string ERR_CHANNELISFULL(const std::string &channel);
+std::string ERR_INVITEONLYCHAN(const std::string &channel);
+std::string ERR_BADCHANNELKEY(const std::string &channel);
 
 #endif

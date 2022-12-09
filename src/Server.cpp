@@ -20,6 +20,14 @@ std::string Server::getServername(void) {
 	return _servername;
 }
 
+std::map<std::string, Channel *> Server::getChannels(void) {
+	return _channels;
+}
+
+std::map<int, User *> Server::getUsers() {
+	return _users;
+}
+
 void Server::run(bool &stop) {
 	int enable = 1;
 	if ((_server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
@@ -122,10 +130,23 @@ void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
 	if (_executor.find(message.command) != _executor.end())
-		reply = _executor[message.command](message, user) + std::string(MESSAGE_END);
+		sendMsg(_executor[message.command](message, user), user);
 	else
-		reply = join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)) + std::string(MESSAGE_END);
-	if (reply.length())
+		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
+}
+
+void Server::sendMsg(const std::string &message, User *user) {
+	std::string reply;
+
+	if (message.length()) {
+		reply = message + std::string(MESSAGE_END);
 		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
 			error("send", false);
+	}
+}
+
+void Server::createChannel(std::string channel_name, User *user) {
+	Channel *new_channel = new Channel(channel_name, user);
+
+	_channels[channel_name] = new_channel;
 }
