@@ -1,8 +1,8 @@
-#include "IRC.hpp"
+#include "Channel.hpp"
 
-ft::Channel::Channel(std::string channelname) {
+Channel::Channel(std::string channelname) {
 	_channelname = channelname;
 }
 
-ft::Channel::~Channel() {
+Channel::~Channel() {
 }

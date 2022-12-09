@@ -1,26 +1,26 @@
-#include "IRC.hpp"
+#include "Server.hpp"
 
-ft::Server::Server(std::string port, std::string password) {
+Server::Server(std::string port, std::string password) {
 	_password = password;
 	_port = atoi(port.c_str());
 	_executor[std::string("PASS")] = PASS;
 	_servername = SERVER_NAME;
 }
 
-ft::Server::~Server() {
+Server::~Server() {
 	_users.clear();
 	_channels.clear();
 }
 
-std::string ft::Server::getPassword(void) {
+std::string Server::getPassword(void) {
 	return _password;
 }
 
-std::string ft::Server::getServername(void) {
+std::string Server::getServername(void) {
 	return _servername;
 }
 
-void ft::Server::run(bool &stop) {
+void Server::run(bool &stop) {
 	int enable = 1;
 	if ((_server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0)
 		error("socket", true);
@@ -47,7 +47,7 @@ void ft::Server::run(bool &stop) {
 		loop();
 }
 
-void ft::Server::loop(void) {
+void Server::loop(void) {
 	if (poll(&_sockets[0], _sockets.size(), 3000) == -1)
 		return;
 
@@ -60,7 +60,7 @@ void ft::Server::loop(void) {
 
 }
 
-void ft::Server::acceptNewUser(void) {
+void Server::acceptNewUser(void) {
 	int user_socket;
 
 	struct sockaddr_in address;
@@ -76,11 +76,11 @@ void ft::Server::acceptNewUser(void) {
 	_sockets.back().events = POLLIN;
 }
 
-void ft::Server::receiveMsg(int user_socket) {
+void Server::receiveMsg(int user_socket) {
 	char 						buffer[BUFFER_SIZE];
 	ssize_t						size;
 	std::vector<std::string>	messages;
-	ft::Message					parsed_message;
+	Message					parsed_message;
 
 	if ((size = recv(user_socket, &buffer, BUFFER_SIZE, 0)) <= 0)
 		return;
@@ -92,13 +92,13 @@ void ft::Server::receiveMsg(int user_socket) {
 	}
 }
 
-ft::Message ft::Server::parseMsg(std::string message) {
+Message Server::parseMsg(std::string message) {
 	std::string					command;
 	std::vector<std::string>	middle;
 	std::string					trailing;
 	std::string					delimiter(":");
 	size_t						pos;
-	ft::Message					parsed_message;
+	Message						parsed_message;
 
 	if ((pos = message.find(delimiter)) != std::string::npos) {
 		std::string tmp = message.substr(0, pos);
@@ -118,7 +118,7 @@ ft::Message ft::Server::parseMsg(std::string message) {
 	return parsed_message;
 }
 
-void ft::Server::runCommand(const ft::Message &message, User *user) {
+void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
 	if (_executor.find(message.command) != _executor.end())
@@ -126,6 +126,6 @@ void ft::Server::runCommand(const ft::Message &message, User *user) {
 	else
 		reply = NumericReply(user->getServer()->getServername(), "421", user->getNickname(), message) + std::string(MESSAGE_END);
 	if (reply.length())
-		if (send(user->_user_socket, reply.c_str(), reply.length(), 0) == -1)
+		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
 			error("send", false);
 }

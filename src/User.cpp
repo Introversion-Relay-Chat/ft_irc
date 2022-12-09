@@ -1,6 +1,6 @@
-#include "IRC.hpp"
+#include "User.hpp"
 
-ft::User::User(int user_socket, std::string hostname, ft::Server *server) {
+User::User(int user_socket, std::string hostname, Server *server) {
 	_status = PASSWORD;
 	_user_socket = user_socket;
 	_nickname = "*";
@@ -8,43 +8,43 @@ ft::User::User(int user_socket, std::string hostname, ft::Server *server) {
 	_hostname = hostname;
 }
 
-ft::User::~User() {
+User::~User() {
 	close(_user_socket);
 }
 
-ft::UserStatus ft::User::getStatus(void) {
+int User::getStatus(void) {
 	return _status;
 }
 
-void ft::User::setStatus(UserStatus status) {
+void User::setStatus(int status) {
 	_status = status;
 }
 
-std::string ft::User::getNickname(void) {
+std::string User::getNickname(void) {
 	return _nickname;
 }
 
-void ft::User::setNickname(std::string nickname) {
+void User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
 
-std::string ft::User::getUsername(void) {
+std::string User::getUsername(void) {
 	return _username;
 }
 
-void ft::User::setUsername(std::string username) {
+void User::setUsername(std::string username) {
 	_username = username;
 }
 
-ft::Server *ft::User::getServer(void) {
+Server *User::getServer(void) {
 	return _server;
 }
 
-std::string	ft::User::getServerPrefix(void) {
-	return _server->_servername;
+std::string	User::getServerPrefix(void) {
+	return _server->getServername();
 }
 
-std::string	ft::User::getUserPrefix(void) {
+std::string	User::getUserPrefix(void) {
 	std::string prefix = _nickname;
 
 	if (prefix == "*")
@@ -54,4 +54,8 @@ std::string	ft::User::getUserPrefix(void) {
 	if (_hostname.length())
 		prefix += "@" + _hostname;
 	return prefix;
+}
+
+int User::getUserSocket(void) {
+	return _user_socket;
 }
