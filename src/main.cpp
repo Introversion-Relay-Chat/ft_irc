@@ -1,4 +1,4 @@
-#include "IRC.hpp"
+#include "Utils.hpp"
 
 bool stop = false;
 
@@ -14,7 +14,7 @@ int main(int ac, char **av)
 	}
 
 	signal(SIGINT, handler);
-	ft::Server server = ft::Server(av[1], av[2]);
+	Server server = Server(av[1], av[2]);
 	server.run(stop);
 	return 0;
 }
