@@ -2,7 +2,6 @@
 
 std::string USER(const Message &message, User *sender) {
 	std::string sender_prefix = sender->getServerPrefix();
-
 	if (message.middle.size() < 4) {
 		return join(sender_prefix, "461", sender->getNickname(), ERR_NEEDMOREPARAMS(message.command));
 	}
@@ -17,6 +16,8 @@ std::string USER(const Message &message, User *sender) {
 
 	sender->setUsername(username);
 	sender->setRealname(realname);
-	sender->setStatus(REGISTERED);
+	if (sender->getStatus() == NEED_NICKNAME) {
+		sender->setStatus(REGISTERED);
+	}
 	return std::string();
 }

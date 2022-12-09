@@ -22,7 +22,7 @@ std::string NICK(const Message &message, User *sender) {
 	}
 
 	sender->setNickname(nickname);
-	if (sender->getStatus() == NEED_NICKNAME) {
+	if (sender->getStatus() != NEED_PASSWORD && sender->getStatus() == NEED_NICKNAME) {
 		sender->setStatus(NEED_USERREGISTER);
 	}
 	return std::string();

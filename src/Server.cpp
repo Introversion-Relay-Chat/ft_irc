@@ -131,6 +131,9 @@ void Server::runCommand(const Message &message, User *user) {
 		reply = _executor[message.command](message, user) + std::string(MESSAGE_END);
 	else
 		reply = join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)) + std::string(MESSAGE_END);
+	if (user->getStatus() == REGISTERED) {
+		std::cout << user->getNickname() << " registered!" << std::endl;
+	}
 	if (reply.length())
 		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
 			error("send", false);
