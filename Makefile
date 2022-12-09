@@ -15,8 +15,8 @@ FUNC			=	src/main \
 					src/Utils \
 					src/NumericReplies \
 					src/Commands/PASS \
-
-INC = ./src/IRC.h
+					src/Commands/NICK \
+					src/Commands/USER \
 
 SRC = $(addsuffix .cpp, $(FUNC))
 OBJ = $(addsuffix .o, $(FUNC))
@@ -24,10 +24,10 @@ DEP = $(addsuffix .d, $(FUNC))
 
 %.o: %.cpp
 	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
-	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
+	@$(CPP) $(CXXFLAGS) -o $@ -c $<
 
 $(NAME): $(OBJ)
-	@$(CPP) $(CXXFLAGS) -I $(INC) -o $(NAME) $(OBJ)
+	@$(CPP) $(CXXFLAGS) -o $(NAME) $(OBJ)
 	@echo "$(NAME): $(GREEN) $(NAME) was created! $(CHECK) $(RESET)"
 
 all: $(NAME)

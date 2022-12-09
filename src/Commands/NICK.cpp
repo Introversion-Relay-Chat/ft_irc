@@ -2,11 +2,12 @@
 
 std::string NICK(const Message &message, User *sender) {
 	std::string sender_prefix = sender->getServerPrefix();
-	std::string nickname = message.middle[0];
 
 	if (message.middle.size() < 1) {
-		return join(sender_prefix, "431", nickname, ERR_NONICKNAMEGIVEN());
+		return join(sender_prefix, "431", sender->getNickname(), ERR_NONICKNAMEGIVEN());
 	}
+
+	std::string nickname = message.middle[0];
 
 	if (nickname.length() > 9) {
 		return join(sender_prefix, "432", nickname, ERR_ERRONEUSNICKNAME(nickname));

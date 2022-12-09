@@ -4,6 +4,8 @@ Server::Server(std::string port, std::string password) {
 	_password = password;
 	_port = atoi(port.c_str());
 	_executor[std::string("PASS")] = PASS;
+	_executor[std::string("NICK")] = NICK;
+	_executor[std::string("USER")] = USER;
 	_servername = SERVER_NAME;
 }
 
