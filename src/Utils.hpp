@@ -36,9 +36,10 @@
 
 // User Status
 enum UserStatus {
-	PASSWORD,
-	REGISTER,
-	ONLINE,
+	NEED_PASSWORD,
+	NEED_NICKNAME,
+	NEED_USERREGISTER,
+	REGISTERED,
 	DELETE
 };
 
@@ -61,5 +62,8 @@ std::string PASS(const Message &message, User *sender);
 std::string ERR_UNKNOWNCOMMAND(const std::string &command);
 std::string ERR_NEEDMOREPARAMS(const std::string &command);
 std::string ERR_ALREADYREGISTRED(void);
+std::string ERR_NONICKNAMEGIVEN(void);
+std::string ERR_ERRONEUSNICKNAME(const std::string &nickname);
+std::string ERR_NICKNAMEINUSE(const std::string &nickname);
 
 #endif
