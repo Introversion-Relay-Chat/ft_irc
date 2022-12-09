@@ -1,7 +1,7 @@
 #ifndef SERVER_HPP
 #define SERVER_HPP
 
-#include "utils.hpp"
+#include "Utils.hpp"
 
 class User;
 class Channel;

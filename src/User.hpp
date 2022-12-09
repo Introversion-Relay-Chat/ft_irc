@@ -1,7 +1,7 @@
 #ifndef USER_HPP
 #define USER_HPP
 
-#include "utils.hpp"
+#include "Utils.hpp"
 
 class Server;
 struct Message;
@@ -15,7 +15,7 @@ class User {
 		std::string				_nickname;
 		std::string				_username;
 		std::string				_hostname;
-		int						_modes;
+		// int						_modes;
 		std::set<std::string>	_joined_channels;
 
 	public:

@@ -1,7 +1,7 @@
 #ifndef CHANNEL_HPP
 #define CHANNEL_HPP
 
-#include "utils.hpp"
+#include "Utils.hpp"
 
 class Channel {
 

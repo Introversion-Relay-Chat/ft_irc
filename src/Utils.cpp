@@ -1,4 +1,4 @@
-#include "utils.hpp"
+#include "Utils.hpp"
 
 void error(std::string message, bool stop) {
 	std::cerr << "error: " << message << std::endl;
