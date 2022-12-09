@@ -1,30 +1,47 @@
-SRCS			=	src/main.cpp \
-					src/Server.cpp \
-					src/User.cpp \
-					src/Utils.cpp \
-					src/NumericReplies.cpp \
-					src/Commands/PASS.cpp \
-
-OBJS			= $(SRCS:.cpp=.o)
-
-CPP				= c++
-RM				= rm -f
-FLAGS			= -Wall -Wextra -Werror -std=c++98
-
 NAME			= ircserv
 
-all:			$(NAME)
+CPP				= c++
+CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -MD
+RM				= rm -f
 
-$(NAME):		$(OBJS)
-				$(CPP) $(FLAGS) -o $(NAME) $(OBJS)
+GREEN = \033[0;32m
+RED = \033[0;31m
+RESET = \033[0m
+CHECK = \033[0;32m\xE2\x9C\x94\033[0m
+
+FUNC			=	src/main \
+					src/Server \
+					src/User \
+					src/Utils \
+					src/NumericReplies \
+					src/Commands/PASS \
+
+INC = ./src/IRC.h
+
+SRC = $(addsuffix .cpp, $(FUNC))
+OBJ = $(addsuffix .o, $(FUNC))
+DEP = $(addsuffix .d, $(FUNC))
 
 %.o: %.cpp
-	$(CPP) $(FLAGS) -c -o $@ $<
+	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
+	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
 
-clean:
-				$(RM) $(OBJS)
+$(NAME): $(OBJ)
+	@$(CPP) $(CXXFLAGS) -I $(INC) -o $(NAME) $(OBJ)
+	@echo "$(NAME): $(GREEN) $(NAME) was created! $(CHECK) $(RESET)"
 
-fclean:			clean
-				$(RM) $(NAME)
+all: $(NAME)
 
-re:				fclean all
+clean :
+	@$(RM) $(OBJ) $(DEP)
+	@echo "$(NAME): $(RED) object files were deleted $(RESET)"
+
+fclean:	clean
+	@$(RM) $(NAME)
+	@echo "$(NAME): $(RED) $(NAME) was deleted $(RESET)"
+
+re :
+	@$(MAKE) fclean
+	@$(MAKE) all
+
+-include $(DEP)
