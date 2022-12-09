@@ -4,6 +4,8 @@ Server::Server(std::string port, std::string password) {
 	_password = password;
 	_port = atoi(port.c_str());
 	_executor[std::string("PASS")] = PASS;
+	_executor[std::string("NICK")] = NICK;
+	_executor[std::string("USER")] = USER;
 	_executor[std::string("JOIN")] = JOIN;
 	_executor[std::string("PART")] = PART;
 	_servername = SERVER_NAME;
@@ -26,7 +28,7 @@ std::map<std::string, Channel *> Server::getChannels(void) {
 	return _channels;
 }
 
-std::map<int, User *> Server::getUsers() {
+std::map<int, User *> Server::getUsers(void) {
 	return _users;
 }
 
@@ -120,8 +122,9 @@ Message Server::parseMsg(std::string message) {
 	middle = split(message, " ");
 	command = *(middle.begin());
 	middle.erase(middle.begin());
-	for (size_t i = 0; i < command.length(); i++)
+	for (size_t i = 0; i < command.length(); i++) {
 		command[i] = std::toupper(command[i]);
+	}
 	parsed_message.command = command;
 	parsed_message.middle = middle;
 	parsed_message.trailing = trailing;
@@ -131,10 +134,15 @@ Message Server::parseMsg(std::string message) {
 void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
-	if (_executor.find(message.command) != _executor.end())
+	if (_executor.find(message.command) != _executor.end()) {
 		sendMsg(_executor[message.command](message, user), user);
-	else
+	}
+	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
+	}
+	if (user->getStatus() == REGISTERED) {
+		std::cout << user->getNickname() << " registered!" << std::endl;
+	}
 }
 
 void Server::sendMsg(const std::string &message, User *user) {
@@ -142,8 +150,9 @@ void Server::sendMsg(const std::string &message, User *user) {
 
 	if (message.length()) {
 		reply = message + std::string(MESSAGE_END);
-		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
+		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1) {
 			error("send", false);
+		}
 	}
 }
 

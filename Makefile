@@ -16,6 +16,8 @@ FUNC			=	src/main \
 					src/Utils \
 					src/NumericReplies \
 					src/Commands/PASS \
+					src/Commands/NICK \
+					src/Commands/USER \
 					src/Commands/JOIN \
 					src/Commands/PART \
 
