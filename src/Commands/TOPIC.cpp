@@ -6,7 +6,6 @@ std::string TOPIC(const Message &message, User *sender) {
 	std::string							channel_name;
 	std::string							topic;
 	Channel								*channel;
-	std::set<int>						channel_users;
 
 	// ERR_NEEDMOREPARAMS
 	if (message.middle.size() < 1) {
@@ -21,8 +20,7 @@ std::string TOPIC(const Message &message, User *sender) {
 	}
 	
 	// ERR_NOTONCHANNEL
-	channel_users = channel->getUsers();
-	if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
+	if (!channel->checkOnChannel(sender)) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(channel_name));
 	}
 
@@ -30,7 +28,7 @@ std::string TOPIC(const Message &message, User *sender) {
 	if (message.middle.size() >= 2) {
 		topic = message.middle[1];
 		// ERR_CHANOPRIVSNEEDED
-		if (sender->getUserSocket() != channel->getOperator()) {
+		if (!channel->checkPrivilege(sender)) {
 			return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(channel_name));
 		}
 		channel->setTopic(topic);

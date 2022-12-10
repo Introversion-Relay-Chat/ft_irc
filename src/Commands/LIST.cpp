@@ -6,6 +6,8 @@ std::string LIST(const Message &message, User *sender) {
 	Channel								*channel;
 	std::vector<std::string>			channels;
 	std::set<int>						channel_users;
+	std::string							topic;
+	std::string							visible;
 
 	// return all channels 
 	if (message.middle.size() < 1) {
@@ -21,6 +23,8 @@ std::string LIST(const Message &message, User *sender) {
 	for (unsigned long i=0; i < channels.size(); i++){
 		channel = sender->getServer()->getChannelByName(channels[i]);
 		channel_users = channel->getUsers();
+		visible = toString(channel->getVisibleUsers(sender));
+		topic = channel->getTopic();
 		// pass if channel not exist
 		if (!channel) {
 			continue ;
@@ -32,9 +36,6 @@ std::string LIST(const Message &message, User *sender) {
 			if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
 				continue ;
 			}
-			// RPL_LIST
-			sender->getServer()->sendMsg(join(sender_prefix, "322", target, RPL_LIST(channels[i], " Scr", "")), sender);
-			continue ;
 		}
 
 		// Private
@@ -42,13 +43,13 @@ std::string LIST(const Message &message, User *sender) {
 			// hide topic if not on channel
 			if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
 				// RPL_LIST
-				sender->getServer()->sendMsg(join(sender_prefix, "322", target, RPL_LIST(channels[i], " Prv", "")), sender);
+				sender->getServer()->sendMsg(join(sender_prefix, "322", target, RPL_LIST(channels[i], visible, "")), sender);
 				continue ;
 			}
 		}
 
 		// RPL_LIST
-		sender->getServer()->sendMsg(join(sender_prefix, "322", target, RPL_LIST(channels[i], "", channel->getTopic())), sender);
+		sender->getServer()->sendMsg(join(sender_prefix, "322", target, RPL_LIST(channels[i], visible, topic)), sender);
 	}
 	// RPL_LISTEND
 	sender->getServer()->sendMsg(join(sender_prefix, "323", target, RPL_LISTEND()), sender);

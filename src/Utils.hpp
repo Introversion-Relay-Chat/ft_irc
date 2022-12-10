@@ -5,6 +5,7 @@
 # include <netinet/in.h>
 # include <arpa/inet.h>
 # include <iostream>
+# include <sstream>
 # include <fcntl.h>
 # include <csignal>
 # include <string>
@@ -57,6 +58,7 @@ struct Message {
 void						error(std::string message, bool stop);
 std::vector<std::string>	split(std::string str, std::string delimiter);
 std::string					join(std::string sender_prefix, std::string code, std::string target, std::string message);
+std::string					toString(int var);
 
 // Commands
 std::string PASS(const Message &message, User *sender);

@@ -32,7 +32,7 @@ std::string RPL_LISTSTART(void) {
 
 // 322
 std::string RPL_LIST(const std::string &channel, const std::string &visible, const std::string &topic) {
-	return channel + visible + " :" + topic;
+	return channel + " " + visible + " :" + topic;
 }
 
 // 323

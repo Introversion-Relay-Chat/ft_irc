@@ -6,7 +6,6 @@ std::string PART(const Message &message, User *sender) {
 	std::string							target = sender->getNickname();
 	std::vector<std::string>			channels;
 	Channel								*channel;
-	std::set<int>						channel_users;
 
 	// ERR_NEEDMOREPARAMS
 	if (message.middle.size() < 1)
@@ -21,9 +20,8 @@ std::string PART(const Message &message, User *sender) {
 			continue ;
 		}
 		
-		channel_users = channel->getUsers();
 		// ERR_NOTONCHANNEL
-		if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
+		if (!channel->checkOnChannel(sender)) {
 			sender->getServer()->sendMsg(join(sender_prefix, "442", target, ERR_NOTONCHANNEL(channels[i])), sender);
 			continue ;
 		}

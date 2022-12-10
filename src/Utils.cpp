@@ -23,7 +23,13 @@ std::vector<std::string> split(std::string str, std::string delimiter) {
 	return splitted;
 }
 
-
 std::string join(std::string sender_prefix, std::string code, std::string target, std::string message) {
 	return ":" + sender_prefix + " " + code + " " + target + " " + message;
+}
+
+std::string toString(int num)
+{
+	std::stringstream stream;
+	stream << num;
+	return stream.str();
 }

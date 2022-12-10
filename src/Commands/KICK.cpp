@@ -30,12 +30,12 @@ std::string KICK(const Message &message, User *sender) {
 	}
 
 	// ERR_NOTONCHANNEL
-	if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
+	if (!channel->checkOnChannel(sender)) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(message.middle[1]));
 	}
 
 	// ERR_CHANOPRIVSNEEDED
-	if (channel->getMode() & FLAG_CHANNEL_I && sender->getUserSocket() != channel->getOperator()) {
+	if (channel->getMode() & FLAG_CHANNEL_I && !channel->checkPrivilege(sender)) {
 		return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(message.middle[0]));
 	}
 

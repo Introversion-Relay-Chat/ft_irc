@@ -61,23 +61,38 @@ std::set<int> Channel::getInvited(void) {
 	return _invited;
 }
 
-std::string Channel::getUserList(User *sender) {
+std::string Channel::getUserList(User *user) {
 	std::string				userlist;
 	std::map<int, User *>	server_users;
 
-	server_users = sender->getServer()->getUsers();
-	for (std::set<int>::iterator user=_users.begin(); user != _users.end(); user++) {
-		if (server_users[*user]->getMode() & FLAG_USER_I) {
+	server_users = user->getServer()->getUsers();
+	for (std::set<int>::iterator it=_users.begin(); it != _users.end(); it++) {
+		if (server_users[*it]->getMode() & FLAG_USER_I) {
 			continue ;
 		}
-		if (*user == _operator) {
-			userlist += "@" + server_users[*user]->getNickname() + " ";
+		if (*it == _operator) {
+			userlist += "@" + server_users[*it]->getNickname() + " ";
 		}
 		else {
-			userlist += server_users[*user]->getNickname() + " ";
+			userlist += server_users[*it]->getNickname() + " ";
 		}
 	}
 	return userlist;
+}
+
+int Channel::getVisibleUsers(User *user) {
+	std::map<int, User *>	server_users;
+	int						size;
+
+	server_users = user->getServer()->getUsers();
+	size = 0;
+	for (std::set<int>::iterator it=_users.begin(); it != _users.end(); it++) {
+		if (server_users[*it]->getMode() & FLAG_USER_I) {
+			continue ;
+		}
+		size++;
+	}
+	return size;
 }
 
 void Channel::addUser(User *user) {
@@ -115,6 +130,20 @@ bool Channel::checkVisible(User *user) {
 		if (_users.find(user->getUserSocket()) == _users.end()) {
 			return false;
 		}
+	}
+	return true;
+}
+
+bool Channel::checkPrivilege(User *user) {
+	if (user->getUserSocket() != _operator) {
+		return false;
+	}
+	return true;
+}
+
+bool Channel::checkOnChannel(User *user) {
+	if (_users.find(user->getUserSocket()) == _users.end()) {
+		return false;
 	}
 	return true;
 }

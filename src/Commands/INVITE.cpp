@@ -5,7 +5,6 @@ std::string INVITE(const Message &message, User *sender) {
 	std::string							target;
 	User								*user;
 	Channel								*channel;
-	std::set<int>						channel_users;
 	std::string							invite_message;
 
 	sender_prefix = sender->getServerPrefix();
@@ -24,19 +23,18 @@ std::string INVITE(const Message &message, User *sender) {
 		return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[1]));
 	}
 
-	channel_users = channel->getUsers();
 	// ERR_NOTONCHANNEL
-	if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
+	if (!channel->checkOnChannel(sender)) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(message.middle[1]));
 	}
 
 	// ERR_CHANOPRIVSNEEDED
-	if (sender->getUserSocket() != channel->getOperator()) {
+	if (!channel->checkPrivilege(sender)) {
 		return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(message.middle[1]));
 	}
 
 	// ERR_USERONCHANNEL
-	if (channel_users.find(user->getUserSocket()) != channel_users.end()) {
+	if (channel->checkOnChannel(user)) {
 		return join(sender_prefix, "443", target, ERR_USERONCHANNEL(message.middle[0], message.middle[1]));
 	}
 
