@@ -1,7 +1,7 @@
 NAME			= ircserv
 
 CPP				= c++
-CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -MD
+CXXFLAGS	= -Wall -Wextra -std=c++98 -MD# -Werror
 RM				= rm -f
 
 GREEN = \033[0;32m
@@ -20,6 +20,11 @@ FUNC			=	src/main \
 					src/Commands/USER \
 					src/Commands/JOIN \
 					src/Commands/PART \
+					src/Commands/VERSION \
+					src/Commands/TIME \
+					src/Commands/ADMIN \
+					src/Commands/INFO \
+
 
 SRC = $(addsuffix .cpp, $(FUNC))
 OBJ = $(addsuffix .o, $(FUNC))

@@ -14,6 +14,8 @@ class Server {
 		std::string							_servername;
 		int									_port;
 		int									_server_socket;
+		std::string							_start_time;
+		std::string							_server_version;
 
 		std::vector<pollfd>					_sockets;
 		std::map<int, User *>				_users;
@@ -29,6 +31,10 @@ class Server {
 		std::string							getServername(void);
 		std::map<std::string, Channel *>	getChannels(void);
 		std::map<int, User *>				getUsers();
+		std::string							getStartTime(void);
+		std::string							getServerVersion(void);
+		
+		std::string							currTime(void);
 
 		void		run(bool &stop);
 		void		loop(void);

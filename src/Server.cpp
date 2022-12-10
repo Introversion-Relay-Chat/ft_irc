@@ -8,7 +8,13 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("USER")] = USER;
 	_executor[std::string("JOIN")] = JOIN;
 	_executor[std::string("PART")] = PART;
+	_executor[std::string("VERSION")] = VERSION;
+	_executor[std::string("TIME")] = TIME;
+	_executor[std::string("ADMIN")] = ADMIN;
+	_executor[std::string("INFO")] = INFO;
 	_servername = SERVER_NAME;
+	_server_version = SERVER_VERSION;
+	_start_time = currTime();
 }
 
 Server::~Server() {
@@ -30,6 +36,26 @@ std::map<std::string, Channel *> Server::getChannels(void) {
 
 std::map<int, User *> Server::getUsers(void) {
 	return _users;
+}
+
+std::string Server::getServerVersion(void) {
+	return _server_version;
+}
+
+std::string Server::getStartTime(void) {
+	return _start_time;
+}
+
+std::string Server::currTime(void) {
+	time_t curr_time;
+	struct tm *local_time;
+	std::string local_time_str;
+
+	time(&curr_time);
+	local_time = localtime(&curr_time);
+	local_time_str = asctime(local_time);
+	local_time_str.erase(--local_time_str.end());
+	return local_time_str;
 }
 
 void Server::run(bool &stop) {
@@ -140,7 +166,7 @@ void Server::runCommand(const Message &message, User *user) {
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
 	}
-	if (user->getStatus() == REGISTERED) {
+	if (user->getStatus() == REGISTERED) { // 나오는지 확인
 		std::cout << user->getNickname() << " registered!" << std::endl;
 	}
 }
