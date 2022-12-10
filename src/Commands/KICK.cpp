@@ -6,7 +6,6 @@ std::string KICK(const Message &message, User *sender) {
 	std::string							target;
 	User								*user;
 	Channel								*channel;
-	std::set<int>						channel_users;
 	std::string							kick_message;
 
 	sender_prefix = sender->getServerPrefix();
@@ -17,7 +16,6 @@ std::string KICK(const Message &message, User *sender) {
 	
 	user = sender->getServer()->getUserByName(message.middle[1]);
 	channel = sender->getServer()->getChannelByName(message.middle[0]);
-	channel_users = channel->getUsers();
 
 	// ERR_NOSUCHCHANNEL
 	if (!channel) {
