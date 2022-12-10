@@ -35,7 +35,7 @@ std::string KICK(const Message &message, User *sender) {
 	}
 
 	// ERR_CHANOPRIVSNEEDED
-	if (sender->getUserSocket() != channel->getOperator()) {
+	if (channel->getMode() & FLAG_CHANNEL_I && sender->getUserSocket() != channel->getOperator()) {
 		return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(message.middle[0]));
 	}
 
