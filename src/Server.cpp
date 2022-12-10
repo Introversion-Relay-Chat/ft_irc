@@ -13,7 +13,13 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("LIST")] = LIST;
 	_executor[std::string("INVITE")] = INVITE;
 	_executor[std::string("KICK")] = KICK;
+	_executor[std::string("VERSION")] = VERSION;
+	_executor[std::string("TIME")] = TIME;
+	_executor[std::string("ADMIN")] = ADMIN;
+	_executor[std::string("INFO")] = INFO;
 	_servername = SERVER_NAME;
+	_server_version = SERVER_VERSION;
+	_start_time = currTime();
 }
 
 Server::~Server() {
@@ -56,6 +62,24 @@ std::vector<std::string> Server::getChannelNames(void) {
 		channels.push_back((*c).first);
 	}
 	return channels;
+std::string Server::getServerVersion(void) {
+	return _server_version;
+}
+
+std::string Server::getStartTime(void) {
+	return _start_time;
+}
+
+std::string Server::currTime(void) {
+	time_t curr_time;
+	struct tm *local_time;
+	std::string local_time_str;
+
+	time(&curr_time);
+	local_time = localtime(&curr_time);
+	local_time_str = asctime(local_time);
+	local_time_str.erase(--local_time_str.end());
+	return local_time_str;
 }
 
 void Server::run(bool &stop) {

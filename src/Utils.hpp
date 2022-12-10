@@ -14,6 +14,7 @@
 # include <vector>
 # include <poll.h>
 # include <unistd.h>
+# include <ctime>
 # include "Server.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
@@ -22,6 +23,7 @@
 # define BUFFER_SIZE	4096
 # define MESSAGE_END	"\r\n"
 # define SERVER_NAME	"tmp.server.name"
+# define SERVER_VERSION	"2.8"
 
 # define FLAG_CHANNEL_O	1
 # define FLAG_CHANNEL_P	2
@@ -67,6 +69,10 @@ std::string NAMES(const Message &message, User *sender);
 std::string LIST(const Message &message, User *sender);
 std::string INVITE(const Message &message, User *sender);
 std::string KICK(const Message &message, User *sender);
+std::string VERSION(const Message &message, User *sender);
+std::string TIME(const Message &message, User *sender);
+std::string ADMIN(const Message &message, User *sender);
+std::string INFO(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);

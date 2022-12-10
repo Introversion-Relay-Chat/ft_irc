@@ -1,5 +1,25 @@
 #include "Utils.hpp"
 
+// 256
+std::string RPL_ADMINME(const std::string &server) {
+	return server + " :Administrative info";
+}
+
+// 257
+std::string RPL_ADMINLOC1(const std::string &info) {
+	return ":" + info;
+}
+
+// 258
+std::string RPL_ADMINLOC2(const std::string &info) {
+	return ":" + info;
+}
+
+// 259
+std::string RPL_ADMINEMAIL(const std::string &info) {
+	return ":" + info;
+}
+
 // 301
 std::string RPL_AWAY(const std::string &nickname, const std::string &message) {
 	return nickname + " :" + message;
@@ -30,9 +50,15 @@ std::string RPL_TOPIC(const std::string &channel, const std::string &topic) {
 	return channel + " :" + topic;
 }
 
+<<<<<<< HEAD
 // 341
 std::string RPL_INVITING(const std::string &channel, const std::string &nickname) {
 	return channel + " " + nickname;
+=======
+// 351
+std::string RPL_VERSION(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &comments) {
+	return version + "." + debuglevel + " " + server + " :" + comments;
+>>>>>>> origin/feat-#10
 }
 
 // 353
@@ -40,6 +66,7 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist
 	return channel + " :" + userlist;
 }
 
+<<<<<<< HEAD
 // 366
 std::string RPL_ENDOFNAMES(const std::string &channel) {
 	return channel + " :End of /NAMES list";
@@ -48,6 +75,21 @@ std::string RPL_ENDOFNAMES(const std::string &channel) {
 // 401
 std::string ERR_NOSUCHNICK(const std::string &nickname) {
 	return nickname + " :No such nick/channel";
+=======
+// 371
+std::string RPL_INFO(const std::string &string) {
+	return ":" + string;
+}
+
+// 374
+std::string RPL_ENDOFINFO(void) {
+	return ":End of /INFO list";
+}
+
+// 391
+std::string RPL_TIME(const std::string &server, const std::string &string) {
+	return server + " :" + string;
+>>>>>>> origin/feat-#10
 }
 
 // 403
