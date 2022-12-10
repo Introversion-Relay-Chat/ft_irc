@@ -14,9 +14,9 @@ std::string NAMES(const Message &message, User *sender) {
 	std::set<std::string>				sender_channels;
 	std::set<std::string>::iterator		chan_it;
 
+	all_channels = sender->getServer()->getChannels();
 	// return users from all channels 
 	if (message.middle.size() < 1) {
-		all_channels = sender->getServer()->getChannels();
 		for (std::map<std::string, Channel *>::iterator chan = all_channels.begin(); chan != all_channels.end(); chan++) {
 			channels.push_back((*chan).first);
 		}

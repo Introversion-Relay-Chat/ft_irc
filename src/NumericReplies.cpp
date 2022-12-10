@@ -1,4 +1,18 @@
 #include "Utils.hpp"
+// 321
+std::string RPL_LISTSTART(void) {
+	return "Channel :Topic";
+}
+
+// 322
+std::string RPL_LIST(const std::string &channel, const std::string &visible, const std::string &topic) {
+	return channel + visible + " :" + topic;
+}
+
+// 323
+std::string RPL_LISTEND(void) {
+	return ":End of /LIST";
+}
 
 // 331
 std::string RPL_NOTOPIC(const std::string &channel) {
