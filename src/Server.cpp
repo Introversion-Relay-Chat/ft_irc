@@ -62,6 +62,8 @@ std::vector<std::string> Server::getChannelNames(void) {
 		channels.push_back((*c).first);
 	}
 	return channels;
+}
+
 std::string Server::getServerVersion(void) {
 	return _server_version;
 }

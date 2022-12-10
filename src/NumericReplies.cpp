@@ -50,15 +50,14 @@ std::string RPL_TOPIC(const std::string &channel, const std::string &topic) {
 	return channel + " :" + topic;
 }
 
-<<<<<<< HEAD
 // 341
 std::string RPL_INVITING(const std::string &channel, const std::string &nickname) {
 	return channel + " " + nickname;
-=======
+}
+
 // 351
 std::string RPL_VERSION(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &comments) {
 	return version + "." + debuglevel + " " + server + " :" + comments;
->>>>>>> origin/feat-#10
 }
 
 // 353
@@ -66,16 +65,11 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist
 	return channel + " :" + userlist;
 }
 
-<<<<<<< HEAD
 // 366
 std::string RPL_ENDOFNAMES(const std::string &channel) {
 	return channel + " :End of /NAMES list";
 }
 
-// 401
-std::string ERR_NOSUCHNICK(const std::string &nickname) {
-	return nickname + " :No such nick/channel";
-=======
 // 371
 std::string RPL_INFO(const std::string &string) {
 	return ":" + string;
@@ -89,7 +83,11 @@ std::string RPL_ENDOFINFO(void) {
 // 391
 std::string RPL_TIME(const std::string &server, const std::string &string) {
 	return server + " :" + string;
->>>>>>> origin/feat-#10
+}
+
+// 401
+std::string ERR_NOSUCHNICK(const std::string &nickname) {
+	return nickname + " :No such nick/channel";
 }
 
 // 403
