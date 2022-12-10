@@ -1,6 +1,7 @@
 #include "../Utils.hpp"
 
 std::string INFO(const Message &message, User *sender) {
+	(void) message;
 	std::string	sender_prefix = sender->getServerPrefix();
 	std::string target = sender->getNickname();
 	std::vector<std::string> info;

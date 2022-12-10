@@ -1,6 +1,7 @@
 #include "../Utils.hpp"
 
 std::string VERSION(const Message &message, User *sender) {
+	(void) message;
 	std::string	sender_prefix = sender->getServerPrefix();
 	std::string target = sender->getNickname();
 	std::string comments = "Server named " + sender_prefix + "'s version is " + sender->getServer()->getServerVersion() + ".0";

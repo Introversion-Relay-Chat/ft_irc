@@ -166,7 +166,7 @@ void Server::runCommand(const Message &message, User *user) {
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
 	}
-	if (user->getStatus() == REGISTERED) { // 나오는지 확인
+	if (user->getStatus() == REGISTERED) {
 		std::cout << user->getNickname() << " registered!" << std::endl;
 	}
 }
