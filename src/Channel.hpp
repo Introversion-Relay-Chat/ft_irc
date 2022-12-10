@@ -35,6 +35,7 @@ class Channel {
 		int						getMode(void);
 		std::set<int>			getUsers(void);
 		std::set<int>			getInvited(void);
+		std::string				getUserList(User *sender);
 
 		void					addUser(User *user);
 		void					removeUser(User *user);

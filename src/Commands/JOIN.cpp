@@ -9,8 +9,6 @@ std::string JOIN(const Message &message, User *sender) {
 	std::map<std::string, Channel *>	all_channels;
 	Channel								*channel;
 	std::set<int> 						invited;
-	std::set<int>						channel_users;
-	std::map<int, User *>				server_users;
 	std::string							topic;
 	std::string							userlist;
 
@@ -77,17 +75,10 @@ std::string JOIN(const Message &message, User *sender) {
 		if (topic.length())
 			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_TOPIC(channels[i], topic)), sender);
 		else
-			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_NOTOPIC(channels[i])), sender);
+			sender->getServer()->sendMsg(join(sender_prefix, "331", target, RPL_NOTOPIC(channels[i])), sender);
 		
 		// RPL_NAMREPLY
-		channel_users = channel->getUsers();
-		server_users = sender->getServer()->getUsers();
-    	for (std::set<int>::iterator user=channel_users.begin(); user != channel_users.end(); user++) {
-			if (*user == channel->getOperator())
-				userlist += "@" + server_users[*user]->getNickname() + " ";
-			else
-				userlist += server_users[*user]->getNickname() + " ";
-		}
+		userlist = channel->getUserList(sender);
 		sender->getServer()->sendMsg(join(sender_prefix, "353", target, RPL_NAMREPLY(channels[i], userlist)), sender);
 	}
 

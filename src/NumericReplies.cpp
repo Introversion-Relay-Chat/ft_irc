@@ -15,6 +15,11 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist
 	return channel + " :" + userlist;
 }
 
+// 366
+std::string RPL_ENDOFNAMES(const std::string &channel) {
+	return channel + " :End of /NAMES list";
+}
+
 // 403
 std::string ERR_NOSUCHCHANNEL(const std::string &channel) {
 	return channel + " :No such channel";

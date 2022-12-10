@@ -61,6 +61,25 @@ std::set<int> Channel::getInvited(void) {
 	return _invited;
 }
 
+std::string Channel::getUserList(User *sender) {
+	std::string				userlist;
+	std::map<int, User *>	server_users;
+
+	server_users = sender->getServer()->getUsers();
+	for (std::set<int>::iterator user=_users.begin(); user != _users.end(); user++) {
+		if (server_users[*user]->getMode() & FLAG_USER_I) {
+			continue ;
+		}
+		if (*user == _operator) {
+			userlist += "@" + server_users[*user]->getNickname() + " ";
+		}
+		else {
+			userlist += server_users[*user]->getNickname() + " ";
+		}
+	}
+	return userlist;
+}
+
 void Channel::addUser(User *user) {
 	_users.insert(user->getUserSocket());
 }
