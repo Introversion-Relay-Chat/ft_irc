@@ -23,6 +23,8 @@ FUNC			=	src/main \
 					src/Commands/TOPIC \
 					src/Commands/NAMES \
 					src/Commands/LIST \
+					src/Commands/INVITE \
+					src/Commands/KICK \
 
 SRC = $(addsuffix .cpp, $(FUNC))
 OBJ = $(addsuffix .o, $(FUNC))

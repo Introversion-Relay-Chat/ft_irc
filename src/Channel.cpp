@@ -87,3 +87,34 @@ void Channel::addUser(User *user) {
 void Channel::removeUser(User *user) {
 	_users.erase(user->getUserSocket());
 }
+
+void Channel::inviteUser(User *user) {
+	_invited.insert(user->getUserSocket());
+}
+
+void Channel::kickUser(User *user) {
+	_invited.erase(user->getUserSocket());
+	removeUser(user);
+	user->leaveChannel(_channelname);
+	if (_users.size() == 0) {
+		user->getServer()->deleteChannel(_channelname);
+	}
+}
+
+bool Channel::checkInvited(User *user) {
+	if (_invited.find(user->getUserSocket()) == _invited.end()) {
+		return false;
+	}
+	else {
+		return true ;
+	}
+}
+
+bool Channel::checkVisible(User *user) {
+	if (_mode & FLAG_CHANNEL_P || _mode & FLAG_CHANNEL_S) {
+		if (_users.find(user->getUserSocket()) == _users.end()) {
+			return false;
+		}
+	}
+	return true;
+}

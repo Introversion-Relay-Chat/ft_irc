@@ -11,6 +11,8 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("TOPIC")] = TOPIC;
 	_executor[std::string("NAMES")] = NAMES;
 	_executor[std::string("LIST")] = LIST;
+	_executor[std::string("INVITE")] = INVITE;
+	_executor[std::string("KICK")] = KICK;
 	_servername = SERVER_NAME;
 }
 
@@ -33,6 +35,27 @@ std::map<std::string, Channel *> Server::getChannels(void) {
 
 std::map<int, User *> Server::getUsers(void) {
 	return _users;
+}
+
+User *Server::getUserByName(std::string nickname) {
+	for (std::map<int, User *>::iterator it=_users.begin(); it != _users.end() ; it++) {
+		if ((*it).second->getNickname() == nickname) {
+			return (*it).second;
+		}
+	}
+	return (*_users.end()).second;
+}
+
+Channel *Server::getChannelByName(std::string channel_name) {
+	return _channels[channel_name];
+}
+
+std::vector<std::string> Server::getChannelNames(void) {
+	std::vector<std::string> channels;
+	for (std::map<std::string, Channel *>::iterator c = _channels.begin(); c != _channels.end(); c++) {
+		channels.push_back((*c).first);
+	}
+	return channels;
 }
 
 void Server::run(bool &stop) {

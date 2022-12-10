@@ -13,14 +13,15 @@ std::string TOPIC(const Message &message, User *sender) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
 	}
 
-	channel_name = message.middle[0];
-	channel = sender->getServer()->getChannels()[channel_name];
 	// ERR_NOSUCHCHANNEL
+	channel_name = message.middle[0];
+	channel = sender->getServer()->getChannelByName(channel_name);
 	if (!channel) {
 		return join(sender_prefix, "403", target, ERR_NOSUCHCHANNEL(channel_name));
 	}
-	channel_users = channel->getUsers();
+	
 	// ERR_NOTONCHANNEL
+	channel_users = channel->getUsers();
 	if (channel_users.find(sender->getUserSocket()) == channel_users.end()) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(channel_name));
 	}

@@ -65,6 +65,8 @@ std::string PART(const Message &message, User *sender);
 std::string TOPIC(const Message &message, User *sender);
 std::string NAMES(const Message &message, User *sender);
 std::string LIST(const Message &message, User *sender);
+std::string INVITE(const Message &message, User *sender);
+std::string KICK(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);

@@ -39,6 +39,11 @@ class Channel {
 
 		void					addUser(User *user);
 		void					removeUser(User *user);
+		void					inviteUser(User *user);
+		void					kickUser(User *user);
+
+		bool					checkInvited(User *user);
+		bool					checkVisible(User *user);
 
 };
 

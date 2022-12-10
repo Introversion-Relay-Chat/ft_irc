@@ -29,6 +29,9 @@ class Server {
 		std::string							getServername(void);
 		std::map<std::string, Channel *>	getChannels(void);
 		std::map<int, User *>				getUsers();
+		User								*getUserByName(std::string nickname);
+		Channel								*getChannelByName(std::string channel_name);
+		std::vector<std::string>			getChannelNames(void);
 
 		void		run(bool &stop);
 		void		loop(void);
