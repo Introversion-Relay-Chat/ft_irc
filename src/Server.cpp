@@ -151,6 +151,7 @@ void Server::receiveMsg(int user_socket) {
 	buffer[size] = '\0';
 	messages = split(std::string(buffer), MESSAGE_END);
 	for (std::vector<std::string>::iterator msg = messages.begin(); msg != messages.end(); msg++) {
+		std::cout << "|" << *msg << "|" << std::endl;
 		parsed_message = parseMsg(*msg);
 		runCommand(parsed_message, _users[user_socket]);
 	}
@@ -180,18 +181,26 @@ Message Server::parseMsg(std::string message) {
 	parsed_message.command = command;
 	parsed_message.middle = middle;
 	parsed_message.trailing = trailing;
+	std::cout << "command: " << "|" << command << "|" << std::endl;
+	std::cout << "middle: " << std::endl;
+	for (std::vector<std::string>::iterator m = middle.begin(); m != middle.end(); m++) {
+		std::cout << "|" << *m << "|" << std::endl;
+	}
+	std::cout << "trailing: " << "|" << trailing << "|" << std::endl;
 	return parsed_message;
 }
 
 void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
+	std::cout << "Before: " << user->getStatus() << std::endl;
 	if (_executor.find(message.command) != _executor.end()) {
 		sendMsg(_executor[message.command](message, user), user);
 	}
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
 	}
+	std::cout << "After: " << user->getStatus() << std::endl;
 	if (user->getStatus() == REGISTERED) {
 		std::cout << user->getNickname() << " registered!" << std::endl;
 	}
