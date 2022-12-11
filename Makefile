@@ -35,6 +35,7 @@ FUNC			=	main \
 					Commands/INFO \
 					Commands/KILL \
 					Commands/WHOIS \
+					Commands/WHOWAS \
 
 INC = ./include
 
