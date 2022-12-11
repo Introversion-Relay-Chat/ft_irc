@@ -84,3 +84,25 @@ void User::joinChannel(std::string channel_name){
 void User::leaveChannel(std::string channel_name){
 	_joined.erase(channel_name);
 }
+
+void		User::printStatus(void) {
+	std::string result;
+	switch (_status)
+	{
+	case NEED_PASSWORD:
+		result = "NEED_PASSWORD";
+		break;
+	case NEED_NICKNAME:
+		result = "NEED_NICKNAME";
+		break;
+	case NEED_USERREGISTER:
+		result = "NEED_USERREGISTER";
+		break;
+	case REGISTERED:
+		result = "REGISTERED";
+		break;
+	default:
+		break;
+	}
+	std::cout << _nickname << " status: " << result << std::endl;
+}
