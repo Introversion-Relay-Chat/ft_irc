@@ -85,6 +85,8 @@ std::string TIME(const Message &message, User *sender);
 std::string ADMIN(const Message &message, User *sender);
 std::string INFO(const Message &message, User *sender);
 std::string KILL(const Message &message, User *sender);
+std::string PRIVMSG(const Message &message, User *sender);
+std::string NOTICE(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
@@ -168,7 +170,7 @@ std::string ERR_WASNOSUCHNICK(const std::string &nickname);
 std::string ERR_TOOMANYTARGETS(const std::string &target);
 std::string ERR_NOSUCHSERVICE(const std::string &service);
 std::string ERR_NOORIGIN(void);
-std::string ERR_NORECIPIENT(void);
+std::string ERR_NORECIPIENT(std::string command);
 std::string ERR_NOTEXTTOSEND(void);
 std::string ERR_NOTOPLEVEL(const std::string &mask);
 std::string ERR_WILDTOPLEVEL(const std::string &mask);
