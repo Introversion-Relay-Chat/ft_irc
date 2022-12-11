@@ -187,9 +187,10 @@ void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
 	if (_executor.find(message.command) != _executor.end()) {
-		if (user->getStatus() == NEED_PASSWORD && message.command != "PASS"
-			|| user->getStatus() == NEED_NICKNAME && message.command != "NICK"
-			|| user->getStatus() == NEED_USERREGISTER && message.command != "USER") {
+		if ((user->getStatus() == NEED_PASSWORD && message.command != "PASS")
+			|| (user->getStatus() == NEED_NICKNAME && message.command != "PASS" && message.command != "NICK")
+			|| (user->getStatus() == NEED_USERREGISTER && message.command != "PASS" && message.command != "NICK" && message.command != "USER"))
+			{
 				sendMsg(join(user->getServer()->getServername(), "451", user->getNickname(), ERR_NOTREGISTERED()), user);
 		}
 		else {
