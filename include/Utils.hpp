@@ -1,6 +1,10 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
 # include <sys/socket.h>
 # include <netinet/in.h>
 # include <arpa/inet.h>
@@ -59,6 +63,7 @@ void						error(std::string message, bool stop);
 std::vector<std::string>	split(std::string str, std::string delimiter);
 std::string					join(std::string sender_prefix, std::string code, std::string target, std::string message);
 std::string					toString(int var);
+std::ostream& operator<<(std::ostream& os, const Message& message);
 
 // Commands
 std::string PASS(const Message &message, User *sender);

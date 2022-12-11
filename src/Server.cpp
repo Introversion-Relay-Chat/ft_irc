@@ -186,6 +186,9 @@ Message Server::parseMsg(std::string message) {
 void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
+	if (DEBUG) {
+		std::cout << message << std::endl;
+	}
 	if (_executor.find(message.command) != _executor.end()) {
 		if ((user->getStatus() == NEED_PASSWORD && message.command != "PASS")
 			|| (user->getStatus() == NEED_NICKNAME && message.command != "PASS" && message.command != "NICK")
