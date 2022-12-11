@@ -1,4 +1,4 @@
-#include "User.hpp"
+#include "../include/User.hpp"
 
 User::User(int user_socket, std::string hostname, Server *server) {
 	_status = NEED_PASSWORD;

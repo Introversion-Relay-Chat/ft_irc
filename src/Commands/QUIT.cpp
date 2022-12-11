@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string QUIT(const Message &message, User *sender) {
 	(void) message;

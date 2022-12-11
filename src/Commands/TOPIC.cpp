@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string TOPIC(const Message &message, User *sender) {
 	std::string							sender_prefix = sender->getServerPrefix();
@@ -18,7 +18,7 @@ std::string TOPIC(const Message &message, User *sender) {
 	if (!channel) {
 		return join(sender_prefix, "403", target, ERR_NOSUCHCHANNEL(channel_name));
 	}
-	
+
 	// ERR_NOTONCHANNEL
 	if (!channel->checkOnChannel(sender)) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(channel_name));

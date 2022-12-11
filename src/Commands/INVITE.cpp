@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string INVITE(const Message &message, User *sender) {
 	std::string							sender_prefix;
@@ -12,7 +12,7 @@ std::string INVITE(const Message &message, User *sender) {
 	// ERR_NEEDMOREPARAMS
 	if (message.middle.size() < 2)
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
-	
+
 	user = sender->getServer()->getUserByName(message.middle[0]);
 	channel = sender->getServer()->getChannelByName(message.middle[1]);
     // ERR_NOSUCHNICK
@@ -43,12 +43,12 @@ std::string INVITE(const Message &message, User *sender) {
 
 	// RPL_INVITING
 	sender->getServer()->sendMsg(join(sender_prefix, "341", target, RPL_INVITING(message.middle[1], message.middle[0])), sender);
-	
+
 	sender_prefix = sender->getUserPrefix();
 	target = user->getNickname();
 	invite_message = "invited from channel: " + channel->getChannelname();
 	// RPL_AWAY
 	sender->getServer()->sendMsg(join(sender_prefix, "301", target, RPL_AWAY(message.middle[0], invite_message)), user);
-	
+
 	return std::string();
 }

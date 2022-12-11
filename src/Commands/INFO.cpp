@@ -1,11 +1,11 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string INFO(const Message &message, User *sender) {
 	(void) message;
 	std::string	sender_prefix = sender->getServerPrefix();
 	std::string target = sender->getNickname();
 	std::vector<std::string> info;
-	
+
 	info.push_back("This is IRC server from Introversion-Relay-Chat");
 	info.push_back("Version is " + sender->getServer()->getServerVersion() + ".0");
 	info.push_back("Server started at " + sender->getServer()->getStartTime());

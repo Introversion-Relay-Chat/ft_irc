@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string NAMES(const Message &message, User *sender) {
 	std::string							sender_prefix = sender->getServerPrefix();
@@ -11,7 +11,7 @@ std::string NAMES(const Message &message, User *sender) {
 	std::set<std::string>				user_channels;
 	std::set<std::string>::iterator		chan_it;
 
-	// return users from all channels 
+	// return users from all channels
 	if (message.middle.size() < 1) {
 		channels = sender->getServer()->getChannelNames();
 	}
