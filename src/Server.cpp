@@ -6,7 +6,15 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("PASS")] = PASS;
 	_executor[std::string("NICK")] = NICK;
 	_executor[std::string("USER")] = USER;
+	_executor[std::string("JOIN")] = JOIN;
+	_executor[std::string("PART")] = PART;
+	_executor[std::string("VERSION")] = VERSION;
+	_executor[std::string("TIME")] = TIME;
+	_executor[std::string("ADMIN")] = ADMIN;
+	_executor[std::string("INFO")] = INFO;
 	_servername = SERVER_NAME;
+	_server_version = SERVER_VERSION;
+	_start_time = currTime();
 }
 
 Server::~Server() {
@@ -22,8 +30,32 @@ std::string Server::getServername(void) {
 	return _servername;
 }
 
+std::map<std::string, Channel *> Server::getChannels(void) {
+	return _channels;
+}
+
 std::map<int, User *> Server::getUsers(void) {
 	return _users;
+}
+
+std::string Server::getServerVersion(void) {
+	return _server_version;
+}
+
+std::string Server::getStartTime(void) {
+	return _start_time;
+}
+
+std::string Server::currTime(void) {
+	time_t curr_time;
+	struct tm *local_time;
+	std::string local_time_str;
+
+	time(&curr_time);
+	local_time = localtime(&curr_time);
+	local_time_str = asctime(local_time);
+	local_time_str.erase(--local_time_str.end());
+	return local_time_str;
 }
 
 void Server::run(bool &stop) {
@@ -116,8 +148,9 @@ Message Server::parseMsg(std::string message) {
 	middle = split(message, " ");
 	command = *(middle.begin());
 	middle.erase(middle.begin());
-	for (size_t i = 0; i < command.length(); i++)
+	for (size_t i = 0; i < command.length(); i++) {
 		command[i] = std::toupper(command[i]);
+	}
 	parsed_message.command = command;
 	parsed_message.middle = middle;
 	parsed_message.trailing = trailing;
@@ -127,14 +160,34 @@ Message Server::parseMsg(std::string message) {
 void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
-	if (_executor.find(message.command) != _executor.end())
-		reply = _executor[message.command](message, user) + std::string(MESSAGE_END);
-	else
-		reply = join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)) + std::string(MESSAGE_END);
+	if (_executor.find(message.command) != _executor.end()) {
+		sendMsg(_executor[message.command](message, user), user);
+	}
+	else {
+		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
+	}
 	if (user->getStatus() == REGISTERED) {
 		std::cout << user->getNickname() << " registered!" << std::endl;
 	}
-	if (reply.length())
-		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1)
+}
+
+void Server::sendMsg(const std::string &message, User *user) {
+	std::string reply;
+
+	if (message.length()) {
+		reply = message + std::string(MESSAGE_END);
+		if (send(user->getUserSocket(), reply.c_str(), reply.length(), 0) == -1) {
 			error("send", false);
+		}
+	}
+}
+
+void Server::createChannel(std::string channel_name, User *user) {
+	Channel *new_channel = new Channel(channel_name, user);
+
+	_channels[channel_name] = new_channel;
+}
+
+void Server::deleteChannel(std::string channel_name) {
+	_channels.erase(channel_name);
 }

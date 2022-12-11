@@ -68,3 +68,11 @@ std::string	User::getUserPrefix(void) {
 int User::getUserSocket(void) {
 	return _user_socket;
 }
+
+void User::joinChannel(std::string channel_name){
+	_joined.insert(channel_name);
+}
+
+void User::leaveChannel(std::string channel_name){
+	_joined.erase(channel_name);
+}

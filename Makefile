@@ -11,12 +11,20 @@ CHECK = \033[0;32m\xE2\x9C\x94\033[0m
 
 FUNC			=	src/main \
 					src/Server \
+					src/Channel \
 					src/User \
 					src/Utils \
 					src/NumericReplies \
 					src/Commands/PASS \
 					src/Commands/NICK \
 					src/Commands/USER \
+					src/Commands/JOIN \
+					src/Commands/PART \
+					src/Commands/VERSION \
+					src/Commands/TIME \
+					src/Commands/ADMIN \
+					src/Commands/INFO \
+
 
 SRC = $(addsuffix .cpp, $(FUNC))
 OBJ = $(addsuffix .o, $(FUNC))

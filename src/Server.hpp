@@ -3,9 +3,9 @@
 
 #include "Utils.hpp"
 
-class User;
-class Channel;
-struct Message;
+class	User;
+class	Channel;
+struct	Message;
 
 class Server {
 
@@ -14,6 +14,8 @@ class Server {
 		std::string							_servername;
 		int									_port;
 		int									_server_socket;
+		std::string							_start_time;
+		std::string							_server_version;
 
 		std::vector<pollfd>					_sockets;
 		std::map<int, User *>				_users;
@@ -25,9 +27,14 @@ class Server {
 		Server(std::string port, std::string password);
 		~Server();
 
-		std::string	getPassword(void);
-		std::string getServername(void);
-		std::map<int, User *> getUsers(void);
+		std::string							getPassword(void);
+		std::string							getServername(void);
+		std::map<std::string, Channel *>	getChannels(void);
+		std::map<int, User *>				getUsers();
+		std::string							getStartTime(void);
+		std::string							getServerVersion(void);
+		
+		std::string							currTime(void);
 
 		void		run(bool &stop);
 		void		loop(void);
@@ -35,7 +42,11 @@ class Server {
 		void		receiveMsg(int user_socket);
 		Message		parseMsg(std::string message);
 		void		runCommand(const Message &message, User *user);
+		void		sendMsg(const std::string &message, User *user);
 
+		void		createChannel(std::string channel_name, User *user);
+		void		deleteChannel(std::string channel_name);
+		
 };
 
 #endif

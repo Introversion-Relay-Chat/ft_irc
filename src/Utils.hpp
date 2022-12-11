@@ -14,13 +14,16 @@
 # include <vector>
 # include <poll.h>
 # include <unistd.h>
+# include <ctime>
 # include "Server.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
 
+# define MAX_CHANNEL	10
 # define BUFFER_SIZE	4096
 # define MESSAGE_END	"\r\n"
 # define SERVER_NAME	"tmp.server.name"
+# define SERVER_VERSION	"2.8"
 
 # define FLAG_CHANNEL_O	1
 # define FLAG_CHANNEL_P	2
@@ -59,6 +62,12 @@ std::string					join(std::string sender_prefix, std::string code, std::string ta
 std::string PASS(const Message &message, User *sender);
 std::string NICK(const Message &message, User *sender);
 std::string USER(const Message &message, User *sender);
+std::string JOIN(const Message &message, User *sender);
+std::string PART(const Message &message, User *sender);
+std::string VERSION(const Message &message, User *sender);
+std::string TIME(const Message &message, User *sender);
+std::string ADMIN(const Message &message, User *sender);
+std::string INFO(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);

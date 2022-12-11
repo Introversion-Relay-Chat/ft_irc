@@ -3,8 +3,9 @@
 
 #include "Utils.hpp"
 
-class Server;
-struct Message;
+class	Server;
+class	Channel;
+struct	Message;
 
 class User {
 
@@ -17,7 +18,7 @@ class User {
 		std::string				_hostname;
 		std::string				_realname;
 		// int						_modes;
-		std::set<std::string>	_joined_channels;
+		std::set<std::string>	_joined;
 
 	public:
 		User(int user_socket, std::string hostname, Server *server);
@@ -36,6 +37,10 @@ class User {
 
 		std::string	getServerPrefix(void);
 		std::string	getUserPrefix(void);
+
+		void		joinChannel(std::string channel_name);
+		void		leaveChannel(std::string channel_name);
+
 };
 
 #endif
