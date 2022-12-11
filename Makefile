@@ -40,18 +40,10 @@ OBJ = $(addprefix $(OBJ_PATH), $(addsuffix .o, $(FUNC)))
 
 DEP = $(addprefix $(OBJ_PATH), $(addsuffix .d, $(FUNC)))
 
-
-# make object files to obj directory
 $(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
 	@mkdir -p $(dir $@)
+	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
 	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
-
-# make $(NAME) with object files
-
-
-# $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
-# 	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
-# 	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
 
 $(NAME): $(OBJ)
 	@$(CPP) $(CXXFLAGS) -I $(INC) -o $(NAME) $(OBJ)
