@@ -30,10 +30,7 @@ FUNC			=	main \
 					Commands/ADMIN \
 					Commands/INFO \
 
-INC = ./include/Server.hpp \
-		./include/Channel.hpp \
-		./include/User.hpp \
-		./include/Utils.hpp \
+INC = ./include
 
 SRC_PATH = ./src/
 SRC = $(addprefix $(SRC_PATH), $(addsuffix .cpp, $(FUNC)))
@@ -41,14 +38,22 @@ SRC = $(addprefix $(SRC_PATH), $(addsuffix .cpp, $(FUNC)))
 OBJ_PATH = ./obj/
 OBJ = $(addprefix $(OBJ_PATH), $(addsuffix .o, $(FUNC)))
 
-DEP_PATH = ./dep/
-DEP = $(addprefix $(DEP_PATH), $(addsuffix .d, $(FUNC)))
+DEP = $(addprefix $(OBJ_PATH), $(addsuffix .d, $(FUNC)))
 
-$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(INC:%=$(SRC_PATH)/%)
-	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
-	@$(CPP) $(CXXFLAGS) -o $@ -c $<
 
-$(NAME): $(SRC_PATH:%.cpp=$(OBJ_PATH)/%.o)
+# make object files to obj directory
+$(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
+	@mkdir -p $(dir $@)
+	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
+
+# make $(NAME) with object files
+
+
+# $(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp
+# 	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
+# 	@$(CPP) $(CXXFLAGS) -I $(INC) -o $@ -c $<
+
+$(NAME): $(OBJ)
 	@$(CPP) $(CXXFLAGS) -I $(INC) -o $(NAME) $(OBJ)
 	@echo "$(NAME): $(GREEN) $(NAME) was created! $(CHECK) $(RESET)"
 
