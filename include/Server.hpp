@@ -18,6 +18,7 @@ class Server {
 		std::string							_server_version;
 
 		std::vector<pollfd>					_sockets;
+		std::vector<int>					_quitters;
 		std::map<int, User *>				_users;
 		std::map<std::string, Channel *>	_channels;
 
@@ -49,6 +50,8 @@ class Server {
 
 		void		createChannel(std::string channel_name, User *user);
 		void		deleteChannel(std::string channel_name);
+		void		deleteUser(int user_socket);
+		void		killUser(User *user);
 		
 };
 

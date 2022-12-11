@@ -80,6 +80,11 @@ std::string RPL_ENDOFINFO(void) {
 	return ":End of /INFO list";
 }
 
+// 381
+std::string RPL_YOUREOPER(void) {
+	return ":You are now an IRC operator";
+}
+
 // 391
 std::string RPL_TIME(const std::string &server, const std::string &string) {
 	return server + " :" + string;

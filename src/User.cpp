@@ -37,6 +37,10 @@ void User::setUsername(std::string username) {
 	_username = username;
 }
 
+std::string	User::getHostname(void) {
+	return _hostname;
+}
+
 std::string	User::getRealname(void) {
 	return _realname;
 }
@@ -47,6 +51,10 @@ void		User::setRealname(std::string realname) {
 
 int User::getMode(void) {
 	return _mode;
+}
+
+void User::setMode(int mode) {
+	_mode = mode;
 }
 
 Server *User::getServer(void) {

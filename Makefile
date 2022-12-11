@@ -20,6 +20,8 @@ FUNC			=	main \
 					Commands/PASS \
 					Commands/NICK \
 					Commands/USER \
+					Commands/OPER \
+					Commands/QUIT \
 					Commands/JOIN \
 					Commands/PART \
 					Commands/TOPIC \
@@ -31,6 +33,7 @@ FUNC			=	main \
 					Commands/TIME \
 					Commands/ADMIN \
 					Commands/INFO \
+					Commands/KILL \
 
 INC = ./include
 

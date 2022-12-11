@@ -6,6 +6,8 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("PASS")] = PASS;
 	_executor[std::string("NICK")] = NICK;
 	_executor[std::string("USER")] = USER;
+	_executor[std::string("OPER")] = OPER;
+	_executor[std::string("QUIT")] = QUIT;
 	_executor[std::string("JOIN")] = JOIN;
 	_executor[std::string("PART")] = PART;
 	_executor[std::string("TOPIC")] = TOPIC;
@@ -17,6 +19,7 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("TIME")] = TIME;
 	_executor[std::string("ADMIN")] = ADMIN;
 	_executor[std::string("INFO")] = INFO;
+	_executor[std::string("KILL")] = KILL;
 	_servername = SERVER_NAME;
 	_server_version = SERVER_VERSION;
 	_start_time = currTime();
@@ -115,13 +118,22 @@ void Server::loop(void) {
 	if (poll(&_sockets[0], _sockets.size(), 3000) == -1)
 		return;
 
-	if (_sockets[0].revents == POLLIN)
+	if (_sockets[0].revents == POLLIN) {
 		acceptNewUser();
-	else
-		for (std::vector<pollfd>::iterator socket = _sockets.begin(); socket != _sockets.end(); socket++)
-			if ((*socket).revents == POLLIN)
+	}
+	else {
+		for (std::vector<pollfd>::iterator socket = _sockets.begin(); socket != _sockets.end(); socket++) {
+			if ((*socket).revents == POLLIN) {
 				receiveMsg((*socket).fd);
+			}
+		}
+	}
 
+	// delete quitters
+	while (!_quitters.empty()) {
+		deleteUser(_quitters.back());
+		_quitters.pop_back();
+	}
 }
 
 void Server::acceptNewUser(void) {
@@ -223,5 +235,33 @@ void Server::createChannel(std::string channel_name, User *user) {
 }
 
 void Server::deleteChannel(std::string channel_name) {
+	delete getChannelByName(channel_name);
 	_channels.erase(channel_name);
+}
+
+void Server::deleteUser(int user_socket) {
+	for (std::vector<pollfd>::iterator it = _sockets.begin(); it != _sockets.end(); it++) {
+		if ((*it).fd == user_socket) {
+			_sockets.erase(it);
+			break;
+		}
+	}
+	delete _users[user_socket];
+	_users.erase(user_socket);
+}
+
+void Server::killUser(User *user) {
+	Message					part_message;
+	std::set<std::string>	channels;
+
+	part_message.command = "PART";
+	part_message.trailing = "";
+	channels = user->getJoinedChannels();
+	for (std::set<std::string>::iterator it=channels.begin(); it!=channels.end(); it++) {
+		part_message.middle.push_back(*it);
+		_executor["PART"](part_message, user);
+		part_message.middle.pop_back();
+	}
+	user->setStatus(DELETE);
+	_quitters.push_back(user->getUserSocket());
 }
