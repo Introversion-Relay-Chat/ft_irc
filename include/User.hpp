@@ -19,6 +19,8 @@ class User {
 		std::string				_realname;
 		int						_mode;
 		std::set<std::string>	_joined;
+		std::map<std::string, time_t>	_nick_history;
+		time_t												_nick_update_time;
 		time_t	_login_time;
 
 	public:
@@ -47,6 +49,11 @@ class User {
 
 		void		joinChannel(std::string channel_name);
 		void		leaveChannel(std::string channel_name);
+
+		void		addNickHistory(std::string nickname, time_t nick_update_time);
+		std::map<std::string, time_t>	getNickHistory(void);
+		time_t	getNickUpdateTime(void);
+		void		reNewNickUpdateTime(void);
 
 		void printStatus(void);
 };
