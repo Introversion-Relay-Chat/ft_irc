@@ -198,8 +198,19 @@ Message Server::parseMsg(std::string message) {
 void Server::runCommand(const Message &message, User *user) {
 	std::string	reply;
 
+	if (DEBUG) {
+		std::cout << message << std::endl;
+	}
 	if (_executor.find(message.command) != _executor.end()) {
-		sendMsg(_executor[message.command](message, user), user);
+		if ((user->getStatus() == NEED_PASSWORD && message.command != "PASS")
+			|| (user->getStatus() == NEED_NICKNAME && message.command != "PASS" && message.command != "NICK")
+			|| (user->getStatus() == NEED_USERREGISTER && message.command != "PASS" && message.command != "NICK" && message.command != "USER"))
+			{
+				sendMsg(join(user->getServer()->getServername(), "451", user->getNickname(), ERR_NOTREGISTERED()), user);
+		}
+		else {
+			sendMsg(_executor[message.command](message, user), user);
+		}
 	}
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);

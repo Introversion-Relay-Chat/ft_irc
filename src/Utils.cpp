@@ -33,3 +33,13 @@ std::string toString(int num)
 	stream << num;
 	return stream.str();
 }
+
+std::ostream& operator<<(std::ostream& os, const Message& message) {
+	os << "command: " << "|" << message.command << "|" << std::endl;
+	os << "middle: " << std::endl;
+	for (std::vector<std::string>::const_iterator m = message.middle.begin(); m != message.middle.end(); m++) {
+		os << "|" << *m << "|" << std::endl;
+	}
+	os << "trailing: " << "|" << message.trailing << "|" << std::endl;
+	return os;
+}

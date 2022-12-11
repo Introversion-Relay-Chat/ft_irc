@@ -1,7 +1,9 @@
 NAME			= ircserv
 
+ARGUMENTS			=	6667 pass
+
 CPP				= c++
-CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -MD
+CXXFLAGS	= -Wall -Wextra -Werror -std=c++98
 RM				= rm -f
 
 GREEN = \033[0;32m
@@ -65,5 +67,11 @@ fclean:	clean
 re :
 	@$(MAKE) fclean
 	@$(MAKE) all
+
+debugflags:
+	@$(eval CXXFLAGS += -MD -g -D DEBUG)
+
+debug: debugflags all
+	./$(NAME) $(ARGUMENTS)
 
 -include $(DEP)

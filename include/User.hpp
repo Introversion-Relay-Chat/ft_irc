@@ -45,6 +45,7 @@ class User {
 		void		joinChannel(std::string channel_name);
 		void		leaveChannel(std::string channel_name);
 
+		void printStatus(void);
 };
 
 #endif
