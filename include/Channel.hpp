@@ -33,6 +33,7 @@ class Channel {
 		int						getLimit(void);
 		void					setLimit(int limit);
 		int						getMode(void);
+		void					setMode(int mode);
 		std::set<int>			getUsers(void);
 		std::set<int>			getInvited(void);
 		std::string				getUserList(User *user);

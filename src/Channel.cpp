@@ -5,7 +5,7 @@ Channel::Channel(std::string channelname, User *user) {
 	_topic = std::string();
 	_key = std::string();
 	_operator = user->getUserSocket();
-	_limit = 100;
+	_limit = DEFAULT_LIMIT;
 	_mode = 0;
 	_users.insert(user->getUserSocket());
 }
@@ -51,6 +51,10 @@ void Channel::setLimit(int limit) {
 
 int Channel::getMode(void) {
 	return _mode;
+}
+
+void Channel::setMode(int mode) {
+	_mode = mode;
 }
 
 std::set<int> Channel::getUsers(void) {

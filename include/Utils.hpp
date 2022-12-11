@@ -25,6 +25,7 @@
 # include "Channel.hpp"
 
 # define MAX_CHANNEL	10
+# define DEFAULT_LIMIT	100
 # define BUFFER_SIZE	4096
 # define MESSAGE_END	"\r\n"
 # define SERVER_NAME	"tmp.server.name"
@@ -136,7 +137,7 @@ std::string RPL_WHOISCHANNELS(const std::string &nickname, const std::string &ch
 std::string RPL_LISTSTART(void);
 std::string RPL_LIST(const std::string &channel, const std::string &visible, const std::string &topic);
 std::string RPL_LISTEND(void);
-std::string RPL_CHANNELMODEIS(const std::string &channel, const std::string &mode);
+std::string RPL_CHANNELMODEIS(const std::string &channel, const std::string &mode, const std::string &mode_params);
 std::string RPL_NOTOPIC(const std::string &channel);
 std::string RPL_TOPIC(const std::string &channel, const std::string &topic);
 std::string RPL_INVITING(const std::string &channel, const std::string &nickname);

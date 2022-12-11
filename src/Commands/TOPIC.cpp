@@ -28,7 +28,7 @@ std::string TOPIC(const Message &message, User *sender) {
 	if (message.middle.size() >= 2) {
 		topic = message.middle[1];
 		// ERR_CHANOPRIVSNEEDED
-		if (!channel->checkPrivilege(sender)) {
+		if (channel->getMode() & FLAG_CHANNEL_T && !channel->checkPrivilege(sender)) {
 			return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(channel_name));
 		}
 		channel->setTopic(topic);

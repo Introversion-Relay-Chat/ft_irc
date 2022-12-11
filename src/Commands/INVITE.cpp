@@ -29,7 +29,7 @@ std::string INVITE(const Message &message, User *sender) {
 	}
 
 	// ERR_CHANOPRIVSNEEDED
-	if (!channel->checkPrivilege(sender)) {
+	if (channel->getMode() & FLAG_CHANNEL_I && !channel->checkPrivilege(sender)) {
 		return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(message.middle[1]));
 	}
 
