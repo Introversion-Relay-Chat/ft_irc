@@ -66,6 +66,7 @@ std::vector<std::string>	split(std::string str, std::string delimiter);
 std::string					join(std::string sender_prefix, std::string code, std::string target, std::string message);
 std::string					toString(int var);
 std::ostream& operator<<(std::ostream& os, const Message& message);
+std::string currTime(void);
 
 // Commands
 std::string PASS(const Message &message, User *sender);
@@ -85,6 +86,7 @@ std::string TIME(const Message &message, User *sender);
 std::string ADMIN(const Message &message, User *sender);
 std::string INFO(const Message &message, User *sender);
 std::string KILL(const Message &message, User *sender);
+std::string WHOIS(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
@@ -127,7 +129,7 @@ std::string RPL_WHOISSERVER(const std::string &nickname, const std::string &serv
 std::string RPL_WHOISOPERATOR(const std::string &nickname);
 std::string RPL_WHOWASUSER(const std::string &nickname, const std::string &username, const std::string &host, const std::string &realname);
 std::string RPL_ENDOFWHO(const std::string &name);
-std::string RPL_WHOISIDLE(const std::string &nickname, const std::string &seconds, const std::string &signon);
+std::string RPL_WHOISIDLE(const std::string &nickname, int seconds);
 std::string RPL_ENDOFWHOIS(const std::string &nickname);
 std::string RPL_WHOISCHANNELS(const std::string &nickname, const std::string &channels);
 std::string RPL_LISTSTART(void);

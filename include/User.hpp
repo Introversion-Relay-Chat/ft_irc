@@ -19,6 +19,7 @@ class User {
 		std::string				_realname;
 		int						_mode;
 		std::set<std::string>	_joined;
+		time_t	_login_time;
 
 	public:
 		User(int user_socket, std::string hostname, Server *server);
@@ -31,8 +32,10 @@ class User {
 		std::string	getUsername(void);
 		void		setUsername(std::string username);
 		std::string	getHostname(void);
+		void		setHostname(std::string hostname);
 		std::string	getRealname(void);
 		void		setRealname(std::string realname);
+		time_t getLoginTime(void);
 		int			getMode(void);
 		void		setMode(int mode);
 		Server		*getServer(void);

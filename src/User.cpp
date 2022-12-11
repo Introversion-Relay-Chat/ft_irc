@@ -7,6 +7,7 @@ User::User(int user_socket, std::string hostname, Server *server) {
 	_server = server;
 	_hostname = hostname;
 	_realname = "";
+	_login_time = time(NULL);
 }
 
 User::~User() {
@@ -41,12 +42,20 @@ std::string	User::getHostname(void) {
 	return _hostname;
 }
 
+void		User::setHostname(std::string hostname) {
+	_hostname = hostname;
+}
+
 std::string	User::getRealname(void) {
 	return _realname;
 }
 
 void		User::setRealname(std::string realname) {
 	_realname = realname;
+}
+
+time_t User::getLoginTime(void) {
+	return _login_time;
 }
 
 int User::getMode(void) {

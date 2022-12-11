@@ -43,3 +43,15 @@ std::ostream& operator<<(std::ostream& os, const Message& message) {
 	os << "trailing: " << "|" << message.trailing << "|" << std::endl;
 	return os;
 }
+
+std::string currTime(void) {
+	time_t curr_time;
+	struct tm *local_time;
+	std::string local_time_str;
+
+	time(&curr_time);
+	local_time = localtime(&curr_time);
+	local_time_str = asctime(local_time);
+	local_time_str.erase(--local_time_str.end());
+	return local_time_str;
+}

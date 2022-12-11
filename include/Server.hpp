@@ -37,8 +37,6 @@ class Server {
 		std::vector<std::string>			getChannelNames(void);
 		std::string							getStartTime(void);
 		std::string							getServerVersion(void);
-		
-		std::string							currTime(void);
 
 		void		run(bool &stop);
 		void		loop(void);
@@ -52,7 +50,7 @@ class Server {
 		void		deleteChannel(std::string channel_name);
 		void		deleteUser(int user_socket);
 		void		killUser(User *user);
-		
+
 };
 
 #endif

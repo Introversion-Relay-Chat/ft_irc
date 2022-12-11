@@ -20,6 +20,7 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("ADMIN")] = ADMIN;
 	_executor[std::string("INFO")] = INFO;
 	_executor[std::string("KILL")] = KILL;
+	_executor[std::string("WHOIS")] = WHOIS;
 	_servername = SERVER_NAME;
 	_server_version = SERVER_VERSION;
 	_start_time = currTime();
@@ -73,18 +74,6 @@ std::string Server::getServerVersion(void) {
 
 std::string Server::getStartTime(void) {
 	return _start_time;
-}
-
-std::string Server::currTime(void) {
-	time_t curr_time;
-	struct tm *local_time;
-	std::string local_time_str;
-
-	time(&curr_time);
-	local_time = localtime(&curr_time);
-	local_time_str = asctime(local_time);
-	local_time_str.erase(--local_time_str.end());
-	return local_time_str;
 }
 
 void Server::run(bool &stop) {

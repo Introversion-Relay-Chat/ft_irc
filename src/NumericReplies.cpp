@@ -25,6 +25,34 @@ std::string RPL_AWAY(const std::string &nickname, const std::string &message) {
 	return nickname + " :" + message;
 }
 
+// 311
+std::string RPL_WHOISUSER(const std::string &nickname, const std::string &username, const std::string &hostname, const std::string &realname) {
+	return nickname + " " + username + " " + hostname + " * :" + realname;
+}
+
+// 312
+std::string RPL_WHOISSERVER(const std::string &nickname, const std::string &server, const std::string &server_info) {
+	return nickname + " " + server + " :" + server_info;
+}
+
+// 317
+std::string RPL_WHOISIDLE(const std::string &nickname, int seconds) {
+	std::stringstream ss;
+	ss << seconds;
+	std::string seconds_str = ss.str();
+	return nickname + " " + seconds_str + " :seconds idle";
+}
+
+// 318
+std::string RPL_ENDOFWHOIS(const std::string &nickname) {
+	return nickname + " :End of /WHOIS list";
+}
+
+// 319
+std::string RPL_WHOISCHANNELS(const std::string &nickname, const std::string &channels) {
+	return nickname + " :" + channels;
+}
+
 // 321
 std::string RPL_LISTSTART(void) {
 	return "Channel :Topic";
