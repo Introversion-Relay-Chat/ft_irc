@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string LIST(const Message &message, User *sender) {
 	std::string							sender_prefix = sender->getServerPrefix();
@@ -8,7 +8,7 @@ std::string LIST(const Message &message, User *sender) {
 	std::string							topic;
 	std::string							visible;
 
-	// return all channels 
+	// return all channels
 	if (message.middle.size() < 1) {
 		channels = sender->getServer()->getChannelNames();
 	}
