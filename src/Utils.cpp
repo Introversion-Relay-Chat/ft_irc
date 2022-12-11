@@ -44,6 +44,14 @@ std::ostream& operator<<(std::ostream& os, const Message& message) {
 	return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, time_t>& nick_history) {
+	std::cout << "nickname history: " << std::endl;
+	for (std::map<std::string, time_t>::const_iterator pn = nick_history.begin(); pn != nick_history.end(); pn++) {
+		os << "|" << pn->first << "|" << " update_time: " << pn->second << std::endl;
+	}
+	return os;
+}
+
 std::string currTime(void) {
 	time_t curr_time;
 	struct tm *local_time;

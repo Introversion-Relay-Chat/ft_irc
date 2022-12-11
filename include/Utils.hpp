@@ -66,6 +66,7 @@ std::vector<std::string>	split(std::string str, std::string delimiter);
 std::string					join(std::string sender_prefix, std::string code, std::string target, std::string message);
 std::string					toString(int var);
 std::ostream& operator<<(std::ostream& os, const Message& message);
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, time_t>& nick_history);
 std::string currTime(void);
 
 // Commands
@@ -87,6 +88,7 @@ std::string ADMIN(const Message &message, User *sender);
 std::string INFO(const Message &message, User *sender);
 std::string KILL(const Message &message, User *sender);
 std::string WHOIS(const Message &message, User *sender);
+std::string WHOWAS(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
