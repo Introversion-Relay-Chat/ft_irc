@@ -25,6 +25,8 @@
 # define MESSAGE_END	"\r\n"
 # define SERVER_NAME	"tmp.server.name"
 # define SERVER_VERSION	"2.8"
+# define ADMIN_HOST		"127.0.0.1"
+# define ADMIN_PASSWORD	"pass"
 
 # define FLAG_CHANNEL_O	1
 # define FLAG_CHANNEL_P	2
@@ -64,6 +66,8 @@ std::string					toString(int var);
 std::string PASS(const Message &message, User *sender);
 std::string NICK(const Message &message, User *sender);
 std::string USER(const Message &message, User *sender);
+std::string OPER(const Message &message, User *sender);
+std::string QUIT(const Message &message, User *sender);
 std::string JOIN(const Message &message, User *sender);
 std::string PART(const Message &message, User *sender);
 std::string TOPIC(const Message &message, User *sender);
@@ -75,6 +79,7 @@ std::string VERSION(const Message &message, User *sender);
 std::string TIME(const Message &message, User *sender);
 std::string ADMIN(const Message &message, User *sender);
 std::string INFO(const Message &message, User *sender);
+std::string KILL(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);

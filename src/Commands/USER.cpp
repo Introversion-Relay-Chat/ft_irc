@@ -6,17 +6,17 @@ std::string USER(const Message &message, User *sender) {
 		return join(sender_prefix, "461", sender->getNickname(), ERR_NEEDMOREPARAMS(message.command));
 	}
 
-  std::string username = message.middle[0];
+	std::string username = message.middle[0];
 	std::string realname = message.middle[3];
 
 
 	if (sender->getStatus() == REGISTERED) {
     return join(sender_prefix, "462", sender->getNickname(), ERR_ALREADYREGISTRED());
-  }
+	}
 
 	sender->setUsername(username);
 	sender->setRealname(realname);
-	if (sender->getStatus() == NEED_NICKNAME) {
+	if (sender->getStatus() == NEED_USERREGISTER) {
 		sender->setStatus(REGISTERED);
 	}
 	return std::string();

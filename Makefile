@@ -18,6 +18,8 @@ FUNC			=	src/main \
 					src/Commands/PASS \
 					src/Commands/NICK \
 					src/Commands/USER \
+					src/Commands/OPER \
+					src/Commands/QUIT \
 					src/Commands/JOIN \
 					src/Commands/PART \
 					src/Commands/TOPIC \
@@ -29,6 +31,7 @@ FUNC			=	src/main \
 					src/Commands/TIME \
 					src/Commands/ADMIN \
 					src/Commands/INFO \
+					src/Commands/KILL \
 
 
 SRC = $(addsuffix .cpp, $(FUNC))

@@ -30,9 +30,11 @@ class User {
 		void		setNickname(std::string nickname);
 		std::string	getUsername(void);
 		void		setUsername(std::string username);
+		std::string	getHostname(void);
 		std::string	getRealname(void);
 		void		setRealname(std::string realname);
 		int			getMode(void);
+		void		setMode(int mode);
 		Server		*getServer(void);
 		int			getUserSocket(void);
 		std::set<std::string>	getJoinedChannels(void);
