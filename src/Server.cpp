@@ -224,6 +224,7 @@ void Server::createChannel(std::string channel_name, User *user) {
 }
 
 void Server::deleteChannel(std::string channel_name) {
+	delete getChannelByName(channel_name);
 	_channels.erase(channel_name);
 }
 
@@ -234,6 +235,7 @@ void Server::deleteUser(int user_socket) {
 			break;
 		}
 	}
+	delete _users[user_socket];
 	_users.erase(user_socket);
 }
 
