@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 // TODO: server name rule, banmask related job;
 std::string JOIN(const Message &message, User *sender) {
@@ -13,7 +13,7 @@ std::string JOIN(const Message &message, User *sender) {
 	// ERR_NEEDMOREPARAMS
 	if (message.middle.size() < 1)
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
-	
+
 	channels = split(message.middle[0], ",");
 	if (message.middle.size() >= 2)
 		keys = split(message.middle[1], ",");
@@ -47,7 +47,7 @@ std::string JOIN(const Message &message, User *sender) {
 				continue ;
 			}
 		}
-		
+
 		/*
 		// 2. nick/username/hostname not in active bans.
 		// ERR_BANNEDFROMCHAN
@@ -76,7 +76,7 @@ std::string JOIN(const Message &message, User *sender) {
 			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_TOPIC(channels[i], topic)), sender);
 		else
 			sender->getServer()->sendMsg(join(sender_prefix, "331", target, RPL_NOTOPIC(channels[i])), sender);
-		
+
 		// RPL_NAMREPLY
 		userlist = channel->getUserList(sender);
 		sender->getServer()->sendMsg(join(sender_prefix, "353", target, RPL_NAMREPLY(channels[i], userlist)), sender);

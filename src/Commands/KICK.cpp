@@ -1,4 +1,4 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 // TODO: ERR_BADCHANMASK
 std::string KICK(const Message &message, User *sender) {
@@ -13,7 +13,7 @@ std::string KICK(const Message &message, User *sender) {
 	// ERR_NEEDMOREPARAMS
 	if (message.middle.size() < 2)
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
-	
+
 	user = sender->getServer()->getUserByName(message.middle[1]);
 	channel = sender->getServer()->getChannelByName(message.middle[0]);
 
@@ -50,6 +50,6 @@ std::string KICK(const Message &message, User *sender) {
 	}
 	// RPL_AWAY
 	sender->getServer()->sendMsg(join(sender_prefix, "301", target, RPL_AWAY(message.middle[1], kick_message)), user);
-	
+
 	return std::string();
 }

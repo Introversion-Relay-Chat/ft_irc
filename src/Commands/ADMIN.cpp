@@ -1,10 +1,10 @@
-#include "../Utils.hpp"
+#include "../../include/Utils.hpp"
 
 std::string ADMIN(const Message &message, User *sender) {
 	(void) message;
 	std::string	sender_prefix = sender->getServerPrefix();
 	std::string target = sender->getNickname();
-	
+
 	// RPL_ADMINME
 	sender->getServer()->sendMsg(join(sender_prefix, "256", target, RPL_ADMINME(sender_prefix)), sender);
 	// RPL_ADMINLOC1

@@ -1,8 +1,8 @@
-#include "Utils.hpp"
+#include "../include/Utils.hpp"
 
 bool stop = false;
 
-void handler(int) { 
+void handler(int) {
 	stop = true;
 }
 

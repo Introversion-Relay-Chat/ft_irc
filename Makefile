@@ -9,38 +9,47 @@ RED = \033[0;31m
 RESET = \033[0m
 CHECK = \033[0;32m\xE2\x9C\x94\033[0m
 
-FUNC			=	src/main \
-					src/Server \
-					src/Channel \
-					src/User \
-					src/Utils \
-					src/NumericReplies \
-					src/Commands/PASS \
-					src/Commands/NICK \
-					src/Commands/USER \
-					src/Commands/JOIN \
-					src/Commands/PART \
-					src/Commands/TOPIC \
-					src/Commands/NAMES \
-					src/Commands/LIST \
-					src/Commands/INVITE \
-					src/Commands/KICK \
-					src/Commands/VERSION \
-					src/Commands/TIME \
-					src/Commands/ADMIN \
-					src/Commands/INFO \
+FUNC			=	main \
+					Server \
+					Channel \
+					User \
+					Utils \
+					NumericReplies \
+					Commands/PASS \
+					Commands/NICK \
+					Commands/USER \
+					Commands/JOIN \
+					Commands/PART \
+					Commands/TOPIC \
+					Commands/NAMES \
+					Commands/LIST \
+					Commands/INVITE \
+					Commands/KICK \
+					Commands/VERSION \
+					Commands/TIME \
+					Commands/ADMIN \
+					Commands/INFO \
 
+INC = ./include/Server.hpp \
+		./include/Channel.hpp \
+		./include/User.hpp \
+		./include/Utils.hpp \
 
-SRC = $(addsuffix .cpp, $(FUNC))
-OBJ = $(addsuffix .o, $(FUNC))
-DEP = $(addsuffix .d, $(FUNC))
+SRC_PATH = ./src/
+SRC = $(addprefix $(SRC_PATH), $(addsuffix .cpp, $(FUNC)))
 
-%.o: %.cpp
+OBJ_PATH = ./obj/
+OBJ = $(addprefix $(OBJ_PATH), $(addsuffix .o, $(FUNC)))
+
+DEP_PATH = ./dep/
+DEP = $(addprefix $(DEP_PATH), $(addsuffix .d, $(FUNC)))
+
+$(OBJ_PATH)/%.o: $(SRC_PATH)/%.cpp $(INC:%=$(SRC_PATH)/%)
 	@echo "$(NAME): $(GREEN) compiling... $< $(CHECK) $(RESET)"
 	@$(CPP) $(CXXFLAGS) -o $@ -c $<
 
-$(NAME): $(OBJ)
-	@$(CPP) $(CXXFLAGS) -o $(NAME) $(OBJ)
+$(NAME): $(SRC_PATH:%.cpp=$(OBJ_PATH)/%.o)
+	@$(CPP) $(CXXFLAGS) -I $(INC) -o $(NAME) $(OBJ)
 	@echo "$(NAME): $(GREEN) $(NAME) was created! $(CHECK) $(RESET)"
 
 all: $(NAME)
