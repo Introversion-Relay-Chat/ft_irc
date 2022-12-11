@@ -20,6 +20,11 @@ FUNC			=	src/main \
 					src/Commands/USER \
 					src/Commands/JOIN \
 					src/Commands/PART \
+					src/Commands/TOPIC \
+					src/Commands/NAMES \
+					src/Commands/LIST \
+					src/Commands/INVITE \
+					src/Commands/KICK \
 					src/Commands/VERSION \
 					src/Commands/TIME \
 					src/Commands/ADMIN \

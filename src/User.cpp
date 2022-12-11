@@ -45,6 +45,10 @@ void		User::setRealname(std::string realname) {
 	_realname = realname;
 }
 
+int User::getMode(void) {
+	return _mode;
+}
+
 Server *User::getServer(void) {
 	return _server;
 }
@@ -67,6 +71,10 @@ std::string	User::getUserPrefix(void) {
 
 int User::getUserSocket(void) {
 	return _user_socket;
+}
+
+std::set<std::string> User::getJoinedChannels(void) {
+	return _joined;
 }
 
 void User::joinChannel(std::string channel_name){

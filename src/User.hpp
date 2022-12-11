@@ -17,7 +17,7 @@ class User {
 		std::string				_username;
 		std::string				_hostname;
 		std::string				_realname;
-		// int						_modes;
+		int						_mode;
 		std::set<std::string>	_joined;
 
 	public:
@@ -32,8 +32,10 @@ class User {
 		void		setUsername(std::string username);
 		std::string	getRealname(void);
 		void		setRealname(std::string realname);
+		int			getMode(void);
 		Server		*getServer(void);
 		int			getUserSocket(void);
+		std::set<std::string>	getJoinedChannels(void);
 
 		std::string	getServerPrefix(void);
 		std::string	getUserPrefix(void);

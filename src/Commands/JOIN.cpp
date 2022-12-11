@@ -6,11 +6,7 @@ std::string JOIN(const Message &message, User *sender) {
 	std::string							target = sender->getNickname();
 	std::vector<std::string>			channels;
 	std::vector<std::string>			keys;
-	std::map<std::string, Channel *>	all_channels;
 	Channel								*channel;
-	std::set<int> 						invited;
-	std::set<int>						channel_users;
-	std::map<int, User *>				server_users;
 	std::string							topic;
 	std::string							userlist;
 
@@ -24,32 +20,31 @@ std::string JOIN(const Message &message, User *sender) {
 	while (keys.size() < channels.size())
 		keys.push_back(std::string());
 
-	all_channels = sender->getServer()->getChannels();
 	for (unsigned long i=0; i < channels.size(); i++){
-		channel = all_channels[channels[i]];
+		channel = sender->getServer()->getChannelByName(channels[i]);
 		// create channel if doesnt exist
 		if (!channel) {
 			// ERR_TOOMANYCHANNELS
-			if (all_channels.size() == MAX_CHANNEL) {
+			if (static_cast<int>(sender->getServer()->getChannels().size()) >= MAX_CHANNEL) {
 				return join(sender_prefix, "405", target, ERR_TOOMANYCHANNELS(channels[i]));
 			}
 			else {
 				sender->getServer()->createChannel(channels[i], sender);
-				all_channels = sender->getServer()->getChannels();
-				channel = all_channels[channels[i]];
+				channel = sender->getServer()->getChannelByName(channels[i]);
 			}
 		}
 		// ERR_CHANNELISFULL
 		if (static_cast<int>(channel->getUsers().size()) >= channel->getLimit()) {
-			return join(sender_prefix, "471", target, ERR_CHANNELISFULL(channels[i]));
+			sender->getServer()->sendMsg(join(sender_prefix, "471", target, ERR_CHANNELISFULL(channels[i])), sender);
+			continue ;
 		}
 
 		// 1. invite-only
 		// ERR_INVITEONLYCHAN
-		invited = channel->getInvited();
 		if (channel->getMode() & FLAG_CHANNEL_I) {
-			if (invited.find(sender->getUserSocket()) == invited.end()) {
-				return join(sender_prefix, "473", target, ERR_INVITEONLYCHAN(channels[i]));
+			if (!channel->checkInvited(sender)) {
+				sender->getServer()->sendMsg(join(sender_prefix, "473", target, ERR_INVITEONLYCHAN(channels[i])), sender);
+				continue ;
 			}
 		}
 		
@@ -64,30 +59,26 @@ std::string JOIN(const Message &message, User *sender) {
 
 		// 3. passowrd if needed
 		// ERR_BADCHANNELKEY
-		if (channel->getMode() & FLAG_CHANNEL_K)
-			if (keys[i] != channel->getKey())
-				return join(sender_prefix, "475", target, ERR_BADCHANNELKEY(channels[i]));
+		if (channel->getMode() & FLAG_CHANNEL_K) {
+			if (keys[i] != channel->getKey()) {
+				sender->getServer()->sendMsg(join(sender_prefix, "475", target, ERR_BADCHANNELKEY(channels[i])), sender);
+				continue ;
+			}
+		}
 
 		// join channel
 		channel->addUser(sender);
 		sender->joinChannel(channels[i]);
 
-		// RPL_TOPIC
 		topic = channel->getTopic();
+		// RPL_TOPIC
 		if (topic.length())
 			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_TOPIC(channels[i], topic)), sender);
 		else
-			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_NOTOPIC(channels[i])), sender);
+			sender->getServer()->sendMsg(join(sender_prefix, "331", target, RPL_NOTOPIC(channels[i])), sender);
 		
 		// RPL_NAMREPLY
-		channel_users = channel->getUsers();
-		server_users = sender->getServer()->getUsers();
-    	for (std::set<int>::iterator user=channel_users.begin(); user != channel_users.end(); user++) {
-			if (*user == channel->getOperator())
-				userlist += "@" + server_users[*user]->getNickname() + " ";
-			else
-				userlist += server_users[*user]->getNickname() + " ";
-		}
+		userlist = channel->getUserList(sender);
 		sender->getServer()->sendMsg(join(sender_prefix, "353", target, RPL_NAMREPLY(channels[i], userlist)), sender);
 	}
 

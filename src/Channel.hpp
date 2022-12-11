@@ -35,9 +35,18 @@ class Channel {
 		int						getMode(void);
 		std::set<int>			getUsers(void);
 		std::set<int>			getInvited(void);
+		std::string				getUserList(User *user);
+		int						getVisibleUsers(User *user);
 
 		void					addUser(User *user);
 		void					removeUser(User *user);
+		void					inviteUser(User *user);
+		void					kickUser(User *user);
+
+		bool					checkInvited(User *user);
+		bool					checkVisible(User *user);
+		bool					checkPrivilege(User *user);
+		bool					checkOnChannel(User *user);
 
 };
 
