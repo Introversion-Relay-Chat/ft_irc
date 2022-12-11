@@ -75,6 +75,7 @@ std::string OPER(const Message &message, User *sender);
 std::string QUIT(const Message &message, User *sender);
 std::string JOIN(const Message &message, User *sender);
 std::string PART(const Message &message, User *sender);
+std::string MODE(const Message &message, User *sender);
 std::string TOPIC(const Message &message, User *sender);
 std::string NAMES(const Message &message, User *sender);
 std::string LIST(const Message &message, User *sender);

@@ -10,6 +10,7 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("QUIT")] = QUIT;
 	_executor[std::string("JOIN")] = JOIN;
 	_executor[std::string("PART")] = PART;
+	_executor[std::string("MODE")] = MODE;
 	_executor[std::string("TOPIC")] = TOPIC;
 	_executor[std::string("NAMES")] = NAMES;
 	_executor[std::string("LIST")] = LIST;
