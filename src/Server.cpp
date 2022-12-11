@@ -204,6 +204,10 @@ void Server::runCommand(const Message &message, User *user) {
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
 	}
+	if (DEBUG) {
+		std::cout << "nickname: " << user->getNickname() << std::endl;
+		std::cout << user->getNickHistory() << std::endl;
+	}
 }
 
 void Server::sendMsg(const std::string &message, User *user) {
@@ -252,5 +256,13 @@ void Server::killUser(User *user) {
 		part_message.middle.pop_back();
 	}
 	user->setStatus(DELETE);
+
+	user->reNewNickUpdateTime();
+	user->addNickHistory(user->getNickname(), user->getNickUpdateTime());
+	user->setNickname("*");
+	if (DEBUG) {
+		std::cout << "nickname: " << user->getNickname() << std::endl;
+		std::cout << user->getNickHistory() << std::endl;
+	}
 	_quitters.push_back(user->getUserSocket());
 }
