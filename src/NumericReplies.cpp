@@ -95,9 +95,24 @@ std::string ERR_NOSUCHCHANNEL(const std::string &channel) {
 	return channel + " :No such channel";
 }
 
+// 404
+std::string ERR_CANNOTSENDTOCHAN(const std::string &channel) {
+	return channel + " :Cannot send to channel";
+}
+
 // 405
 std::string ERR_TOOMANYCHANNELS(const std::string &channel) {
 	return channel + " :You have joined too many channels";
+}
+
+// 411
+std::string ERR_NORECIPIENT(std::string command) {
+	return ":No recipient given (" + command + ")";
+}
+
+// 412
+std::string ERR_NOTEXTTOSEND(void) {
+	return ":No text to send";
 }
 
 // 421

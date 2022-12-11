@@ -29,6 +29,8 @@ FUNC			=	main \
 					Commands/TIME \
 					Commands/ADMIN \
 					Commands/INFO \
+					Commands/PRIVMSG \
+					Commands/NOTICE \
 
 INC = ./include
 

@@ -17,6 +17,8 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("TIME")] = TIME;
 	_executor[std::string("ADMIN")] = ADMIN;
 	_executor[std::string("INFO")] = INFO;
+	_executor[std::string("PRIVMSG")] = PRIVMSG;
+	_executor[std::string("NOTICE")] = NOTICE;
 	_servername = SERVER_NAME;
 	_server_version = SERVER_VERSION;
 	_start_time = currTime();
@@ -49,7 +51,7 @@ User *Server::getUserByName(std::string nickname) {
 			return (*it).second;
 		}
 	}
-	return (*_users.end()).second;
+	return NULL;
 }
 
 Channel *Server::getChannelByName(std::string channel_name) {
