@@ -21,6 +21,7 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("INFO")] = INFO;
 	_executor[std::string("KILL")] = KILL;
 	_executor[std::string("WHOIS")] = WHOIS;
+	_executor[std::string("WHOWAS")] = WHOWAS;
 	_servername = SERVER_NAME;
 	_server_version = SERVER_VERSION;
 	_start_time = currTime();

@@ -35,6 +35,11 @@ std::string RPL_WHOISSERVER(const std::string &nickname, const std::string &serv
 	return nickname + " " + server + " :" + server_info;
 }
 
+// 314
+std::string RPL_WHOWASUSER(const std::string &nickname, const std::string &username, const std::string &hostname, const std::string &realname) {
+	return nickname + " " + username + " " + hostname + " * :" + realname;
+}
+
 // 317
 std::string RPL_WHOISIDLE(const std::string &nickname, int seconds) {
 	std::stringstream ss;
@@ -96,6 +101,11 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist
 // 366
 std::string RPL_ENDOFNAMES(const std::string &channel) {
 	return channel + " :End of /NAMES list";
+}
+
+// 369
+std::string RPL_ENDOFWHOWAS(const std::string &nickname) {
+	return nickname + " :End of WHOWAS";
 }
 
 // 371
