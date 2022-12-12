@@ -32,6 +32,14 @@ std::string WHOWAS(const Message &message, User *sender) {
 	}
 	std::string search_nickname = message.middle[0];
 
+	int count = INT_MAX;
+	if (message.middle.size() == 2) {
+		count = atoi(message.middle[1].c_str());
+		if (count < 0) {
+			count = INT_MAX;
+		}
+	}
+
 	// 서버에 존재하는 모든 유저를 검색하여 nickname 히스토리를 확인하고, 그 중 search_nickname과 일치하는 값을 results에 저장.
 	std::map<int, User *> users = server->getUsers();
 	std::map<UserName *, time_t> results;
@@ -55,7 +63,11 @@ std::string WHOWAS(const Message &message, User *sender) {
 	}
 
 	// 정렬된 결과를 순회하며 314 RPL_WHOWASUSER, 312 WHOISSERVER를 응답
+	int i = 0;
 	for (std::vector<std::pair<UserName *, time_t> >::iterator it = sorted_results.begin(); it != sorted_results.end(); it++) {
+		if (i >= count) {
+			break;
+		}
 		// 314 RPL_WHOWASUSER
 		server->sendMsg(
 				join(sender_prefix, "314", it->first->nickname,
@@ -66,6 +78,7 @@ std::string WHOWAS(const Message &message, User *sender) {
 				join(sender_prefix, "312", it->first->nickname,
 				RPL_WHOISSERVER(it->first->nickname, it->first->hostname, it->first->realname)
 				), sender);
+		++i;
 	}
 
 	// 369 RPL_ENDOFWHOWAS
