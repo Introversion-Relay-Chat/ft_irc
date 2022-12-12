@@ -13,7 +13,7 @@ class Channel {
 		std::string				_channelname;
 		std::string				_topic;
 		std::string				_key;
-		int						_operator;
+		std::set<int>			_operators;
 		int						_limit;
 		int						_mode;
 		std::set<int>			_users;
@@ -28,8 +28,11 @@ class Channel {
 		void					setTopic(std::string topic);
 		std::string				getKey(void);
 		void					setKey(std::string key);
-		int						getOperator(void);
-		void					setOperator(int op);
+		std::set<int>			getOperators(void);
+		void					addOperator(User *user);
+		void					addOperator(int user_socket);
+		void					removeOperator(User *user);
+		void					removeOperator(int user_socket);
 		int						getLimit(void);
 		void					setLimit(int limit);
 		int						getMode(void);

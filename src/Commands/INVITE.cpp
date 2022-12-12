@@ -19,8 +19,9 @@ std::string INVITE(const Message &message, User *sender) {
 	if (!user) {
 		return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[0]));
 	}
+	// ERR_NOSUCHCHANNEL
 	if (!channel) {
-		return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[1]));
+		return join(sender_prefix, "403", target, ERR_NOSUCHCHANNEL(message.middle[1]));
 	}
 
 	// ERR_NOTONCHANNEL

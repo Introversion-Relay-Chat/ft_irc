@@ -58,8 +58,26 @@ std::string MODE(const Message &message, User *sender) {
 		for (unsigned long i=1; i < flags.length(); i++) {
 			switch (flags[i]) {
 				case 'o':
-		   			// ERR_NOSUCHNICK
-           			// ERR_NOTONCHANNEL
+					// ERR_NEEDMOREPARAMS
+					if (message.middle.size() < 3)
+						sender->getServer()->sendMsg(join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command)), sender);
+					user = sender->getServer()->getUserByName(message.middle[2]);
+					// ERR_NOSUCHNICK
+					if (!user) {
+						return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[2]));
+					}
+					// ERR_NOTONCHANNEL
+					if (!channel->checkOnChannel(user)) {
+						return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(message.middle[0]));
+					}
+					if (sign == '+') {
+						channel->addOperator(user);
+						channel->setMode(channel->getMode() | FLAG_CHANNEL_O);
+					}
+					else if (sign == '-') {
+						channel->removeOperator(user);
+						channel->setMode(channel->getMode() & ~FLAG_CHANNEL_O);
+					}
 					break ;
 				case 'p':
 					if (sign == '+') {
