@@ -35,6 +35,11 @@ std::string RPL_WHOISSERVER(const std::string &nickname, const std::string &serv
 	return nickname + " " + server + " :" + server_info;
 }
 
+// 313
+std::string RPL_WHOISOPERATOR(const std::string &nickname) {
+	return nickname + " :is an IRC operator";
+}
+
 // 314
 std::string RPL_WHOWASUSER(const std::string &nickname, const std::string &username, const std::string &hostname, const std::string &realname) {
 	return nickname + " " + username + " " + hostname + " * :" + realname;

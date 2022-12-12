@@ -46,21 +46,19 @@ std::string WHOIS(const Message &message, User *sender) {
 				RPL_WHOISSERVER(nickname, server->getServername(), info)
 				), sender);
 
-			// TODO: away message 추가 필요
 			// 301 RPL_AWAY
 			server->sendMsg(
 				join(sender_prefix, "301", nickname,
-				RPL_AWAY(message.middle[0], "Away message")
+				RPL_AWAY(message.middle[0], "This is message from IRC server.")
 				), sender);
 
-			// TODO: MODE 명령어 구현 후 추가
-			// // 313 RPL_WHOISOPERATOR
-			// if (it->second->getMode() & MODE_OPERATOR) {
-			// 	server->sendMsg(
-			// 		join(sender_prefix, "313", nickname,
-			// 		RPL_WHOISOPERATOR(nickname)
-			// 		), sender);
-			// }
+			// 313 RPL_WHOISOPERATOR
+			if (it->second->getMode() & FLAG_CHANNEL_O) {
+				server->sendMsg(
+					join(sender_prefix, "313", nickname,
+					RPL_WHOISOPERATOR(nickname)
+					), sender);
+			}
 			time_t cur_time = time(NULL);
 			// 317 RPL_WHOISIDLE
 			server->sendMsg(
