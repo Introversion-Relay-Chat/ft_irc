@@ -11,7 +11,7 @@ std::string PONG(const Message &message, User *sender) {
 		return join(sender_prefix, "401", target, ERR_NOSUCHNICK(sender->getNickname()));
 	}
 
-	sender->setMode(sender->getMode() & ~FLAG_USER_P);
+	sender->setStatus(REGISTERED);
 	
 	return std::string();
 }

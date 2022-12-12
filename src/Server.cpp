@@ -130,6 +130,7 @@ void Server::loop(void) {
 			if ((*socket).revents == POLLIN) {
 				receiveMsg((*socket).fd);
 				_users[(*socket).fd]->setLastCmdTime();
+				_users[(*socket).fd]->setStatus(REGISTERED);
 			}
 		}
 	}
@@ -141,7 +142,7 @@ void Server::loop(void) {
 		if (user->getStatus() < REGISTERED) {
 			continue;
 		}
-		if (now - user->getLastCmdTime() > 15 && !(user->getMode() & FLAG_USER_P)) {
+		if (now - user->getLastCmdTime() > PING_CHECK && user->getStatus() != NEED_PONG) {
 			_executor["PING"](Message(), user);
 		}
 	}
@@ -149,13 +150,9 @@ void Server::loop(void) {
 	// check user received ping
 	for (std::map<int, User *>::iterator it = _users.begin();it != _users.end();it++) {
 		User *user = (*it).second;
-		if (user->getStatus() < REGISTERED) {
-			continue;
-		}
-		if (user->getMode() & FLAG_USER_P) {
+		if (user->getStatus() == NEED_PONG) {
 			time_t now = time(0);
-			if (now - user->getPingTime() > 15) {
-				user->setStatus(DELETE);
+			if (now - user->getPingTime() > TIMEOUT) {
 				_quitters.push_back(user->getUserSocket());
 			}
 		}
@@ -197,7 +194,6 @@ void Server::receiveMsg(int user_socket) {
 	for (std::vector<std::string>::iterator msg = messages.begin(); msg != messages.end(); msg++) {
 		parsed_message = parseMsg(*msg);
 		runCommand(parsed_message, _users[user_socket]);
-		
 	}
 }
 
@@ -295,6 +291,5 @@ void Server::killUser(User *user) {
 		_executor["PART"](part_message, user);
 		part_message.middle.pop_back();
 	}
-	user->setStatus(DELETE);
 	_quitters.push_back(user->getUserSocket());
 }

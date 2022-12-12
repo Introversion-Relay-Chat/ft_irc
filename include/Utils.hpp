@@ -31,6 +31,8 @@
 # define SERVER_VERSION	"2.8"
 # define ADMIN_HOST		"127.0.0.1"
 # define ADMIN_PASSWORD	"pass"
+# define PING_CHECK		15
+# define TIMEOUT		15
 
 # define FLAG_CHANNEL_O	1
 # define FLAG_CHANNEL_P	2
@@ -43,7 +45,6 @@
 # define FLAG_CHANNEL_K	256
 # define FLAG_USER_I	1
 # define FLAG_USER_O	2
-# define FLAG_USER_P	4
 
 // User Status
 enum UserStatus {
@@ -51,7 +52,7 @@ enum UserStatus {
 	NEED_NICKNAME,
 	NEED_USERREGISTER,
 	REGISTERED,
-	DELETE
+	NEED_PONG
 };
 
 // Message Struct
