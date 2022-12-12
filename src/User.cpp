@@ -7,6 +7,8 @@ User::User(int user_socket, std::string hostname, Server *server) {
 	_server = server;
 	_hostname = hostname;
 	_realname = "";
+	_last_cmd_time = time(0);
+	_ping_time = time(0);
 }
 
 User::~User() {
@@ -83,6 +85,22 @@ int User::getUserSocket(void) {
 
 std::set<std::string> User::getJoinedChannels(void) {
 	return _joined;
+}
+
+std::time_t	User::getLastCmdTime(void) {
+	return _last_cmd_time;
+}
+
+void User::setLastCmdTime(void) {
+	_last_cmd_time = time(0);
+}
+
+std::time_t	User::getPingTime(void) {
+	return _ping_time;
+}
+
+void User::setPingTime(void) {
+	_ping_time = time(0);
 }
 
 void User::joinChannel(std::string channel_name){

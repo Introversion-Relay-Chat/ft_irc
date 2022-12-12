@@ -110,6 +110,11 @@ std::string ERR_TOOMANYCHANNELS(const std::string &channel) {
 	return channel + " :You have joined too many channels";
 }
 
+// 409
+std::string ERR_NOORIGIN(void) {
+	return ":No origin specified";
+}
+
 // 411
 std::string ERR_NORECIPIENT(std::string command) {
 	return ":No recipient given (" + command + ")";

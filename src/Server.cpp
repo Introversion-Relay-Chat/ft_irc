@@ -22,6 +22,8 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("KILL")] = KILL;
 	_executor[std::string("PRIVMSG")] = PRIVMSG;
 	_executor[std::string("NOTICE")] = NOTICE;
+	_executor[std::string("PING")] = PING;
+	_executor[std::string("PONG")] = PONG;
 	_servername = SERVER_NAME;
 	_server_version = SERVER_VERSION;
 	_start_time = currTime();
@@ -117,7 +119,7 @@ void Server::run(bool &stop) {
 }
 
 void Server::loop(void) {
-	if (poll(&_sockets[0], _sockets.size(), 3000) == -1)
+	if (poll(&_sockets[0], _sockets.size(), 1000) == -1)
 		return;
 
 	if (_sockets[0].revents == POLLIN) {
@@ -127,6 +129,31 @@ void Server::loop(void) {
 		for (std::vector<pollfd>::iterator socket = _sockets.begin(); socket != _sockets.end(); socket++) {
 			if ((*socket).revents == POLLIN) {
 				receiveMsg((*socket).fd);
+				_users[(*socket).fd]->setLastCmdTime();
+				_users[(*socket).fd]->setStatus(REGISTERED);
+			}
+		}
+	}
+
+	// check user and send ping
+	for (std::map<int, User *>::iterator it = _users.begin();it != _users.end();it++) {
+		User *user = (*it).second;
+		time_t now = time(0);
+		if (user->getStatus() < REGISTERED) {
+			continue;
+		}
+		if (now - user->getLastCmdTime() > PING_CHECK && user->getStatus() != NEED_PONG) {
+			_executor["PING"](Message(), user);
+		}
+	}
+
+	// check user received ping
+	for (std::map<int, User *>::iterator it = _users.begin();it != _users.end();it++) {
+		User *user = (*it).second;
+		if (user->getStatus() == NEED_PONG) {
+			time_t now = time(0);
+			if (now - user->getPingTime() > TIMEOUT) {
+				_quitters.push_back(user->getUserSocket());
 			}
 		}
 	}
@@ -264,6 +291,5 @@ void Server::killUser(User *user) {
 		_executor["PART"](part_message, user);
 		part_message.middle.pop_back();
 	}
-	user->setStatus(DELETE);
 	_quitters.push_back(user->getUserSocket());
 }
