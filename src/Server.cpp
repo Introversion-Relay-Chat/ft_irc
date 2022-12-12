@@ -236,8 +236,10 @@ void Server::runCommand(const Message &message, User *user) {
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
 	}
-	user->setLastCmdTime();
-	user->setStatus(REGISTERED);
+	if (user->getStatus() >= REGISTERED) {
+		user->setLastCmdTime();
+		user->setStatus(REGISTERED);
+	}
 }
 
 void Server::sendMsg(const std::string &message, User *user) {
