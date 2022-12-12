@@ -1,6 +1,6 @@
 #include "../../include/Utils.hpp"
 
-// TODO: server name rule, banmask related job;
+// TODO: banmask related job;
 std::string JOIN(const Message &message, User *sender) {
 	std::string							sender_prefix = sender->getServerPrefix();
 	std::string							target = sender->getNickname();
@@ -64,6 +64,11 @@ std::string JOIN(const Message &message, User *sender) {
 				sender->getServer()->sendMsg(join(sender_prefix, "475", target, ERR_BADCHANNELKEY(channels[i])), sender);
 				continue ;
 			}
+		}
+
+		// validation
+		if (channels[i][0] != '#') {
+			continue ;
 		}
 
 		// join channel

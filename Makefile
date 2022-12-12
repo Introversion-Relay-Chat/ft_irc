@@ -24,6 +24,7 @@ FUNC			=	main \
 					Commands/QUIT \
 					Commands/JOIN \
 					Commands/PART \
+					Commands/MODE \
 					Commands/TOPIC \
 					Commands/NAMES \
 					Commands/LIST \

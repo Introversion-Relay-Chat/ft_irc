@@ -1,5 +1,10 @@
 #include "../include/Utils.hpp"
 
+// 221
+std::string RPL_UMODEIS(const std::string &mode) {
+	return mode;
+}
+
 // 256
 std::string RPL_ADMINME(const std::string &server) {
 	return server + " :Administrative info";
@@ -38,6 +43,11 @@ std::string RPL_LIST(const std::string &channel, const std::string &visible, con
 // 323
 std::string RPL_LISTEND(void) {
 	return ":End of /LIST";
+}
+
+// 324
+std::string RPL_CHANNELMODEIS(const std::string &channel, const std::string &mode, const std::string &mode_params) {
+	return channel + " " + mode + " " + mode_params;
 }
 
 // 331
@@ -237,7 +247,7 @@ std::string ERR_CHANNELISFULL(const std::string &channel) {
 
 // 472
 std::string ERR_UNKNOWNMODE(const std::string &char_) {
-	return char_ + " :is unknown mode char to me for <channel>" ;
+	return char_ + " :is unknown mode char to me";
 }
 
 // 473

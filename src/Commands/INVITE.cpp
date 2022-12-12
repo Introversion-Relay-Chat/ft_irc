@@ -19,17 +19,13 @@ std::string INVITE(const Message &message, User *sender) {
 	if (!user) {
 		return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[0]));
 	}
-	if (!channel) {
-		return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[1]));
-	}
-
 	// ERR_NOTONCHANNEL
-	if (!channel->checkOnChannel(sender)) {
+	if (!channel || !channel->checkOnChannel(sender)) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(message.middle[1]));
 	}
 
 	// ERR_CHANOPRIVSNEEDED
-	if (!channel->checkPrivilege(sender)) {
+	if (channel->getMode() & FLAG_CHANNEL_I && !channel->checkPrivilege(sender)) {
 		return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(message.middle[1]));
 	}
 
