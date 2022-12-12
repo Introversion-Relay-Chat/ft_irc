@@ -36,6 +36,10 @@ FUNC			=	main \
 					Commands/KILL \
 					Commands/WHOIS \
 					Commands/WHOWAS \
+					Commands/PRIVMSG \
+					Commands/NOTICE \
+					Commands/PING \
+					Commands/PONG \
 
 INC = ./include
 

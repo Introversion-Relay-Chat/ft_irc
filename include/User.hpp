@@ -22,6 +22,8 @@ class User {
 		std::map<std::string, time_t>	_nick_history;
 		time_t												_nick_update_time;
 		time_t	_login_time;
+		std::time_t				_last_cmd_time;
+		std::time_t				_ping_time;
 
 	public:
 		User(int user_socket, std::string hostname, Server *server);
@@ -43,6 +45,10 @@ class User {
 		Server		*getServer(void);
 		int			getUserSocket(void);
 		std::set<std::string>	getJoinedChannels(void);
+		std::time_t	getLastCmdTime(void);
+		void		setLastCmdTime(void);
+		std::time_t	getPingTime(void);
+		void		setPingTime(void);
 
 		std::string	getServerPrefix(void);
 		std::string	getUserPrefix(void);

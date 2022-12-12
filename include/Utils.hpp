@@ -31,6 +31,8 @@
 # define SERVER_VERSION	"2.8"
 # define ADMIN_HOST		"127.0.0.1"
 # define ADMIN_PASSWORD	"pass"
+# define PING_CHECK		15
+# define TIMEOUT		15
 
 # define FLAG_CHANNEL_O	1
 # define FLAG_CHANNEL_P	2
@@ -50,7 +52,7 @@ enum UserStatus {
 	NEED_NICKNAME,
 	NEED_USERREGISTER,
 	REGISTERED,
-	DELETE
+	NEED_PONG
 };
 
 // Message Struct
@@ -89,6 +91,10 @@ std::string INFO(const Message &message, User *sender);
 std::string KILL(const Message &message, User *sender);
 std::string WHOIS(const Message &message, User *sender);
 std::string WHOWAS(const Message &message, User *sender);
+std::string PRIVMSG(const Message &message, User *sender);
+std::string NOTICE(const Message &message, User *sender);
+std::string PING(const Message &message, User *sender);
+std::string PONG(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
@@ -172,7 +178,7 @@ std::string ERR_WASNOSUCHNICK(const std::string &nickname);
 std::string ERR_TOOMANYTARGETS(const std::string &target);
 std::string ERR_NOSUCHSERVICE(const std::string &service);
 std::string ERR_NOORIGIN(void);
-std::string ERR_NORECIPIENT(void);
+std::string ERR_NORECIPIENT(std::string command);
 std::string ERR_NOTEXTTOSEND(void);
 std::string ERR_NOTOPLEVEL(const std::string &mask);
 std::string ERR_WILDTOPLEVEL(const std::string &mask);
