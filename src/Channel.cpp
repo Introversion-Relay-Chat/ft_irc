@@ -86,7 +86,7 @@ std::string Channel::getUserList(User *user) {
 		if (server_users[*it]->getMode() & FLAG_USER_I) {
 			continue ;
 		}
-		if (checkPrivilege(server_users[*it]) {
+		if (checkPrivilege(server_users[*it])) {
 			userlist += "@" + server_users[*it]->getNickname() + " ";
 		}
 		else {

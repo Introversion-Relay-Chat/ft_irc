@@ -24,6 +24,10 @@ std::string MODE(const Message &message, User *sender) {
 	flags = message.middle[1];
 	// channel mode 
 	if (channel) {
+		// ERR_NOTONCHANNEL
+		if (!channel->checkOnChannel(sender)) {
+			return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(name));
+		}
 		// ERR_CHANOPRIVSNEEDED
 		if (!channel->checkPrivilege(sender)) {
 			return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(name));
@@ -63,12 +67,8 @@ std::string MODE(const Message &message, User *sender) {
 						sender->getServer()->sendMsg(join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command)), sender);
 					user = sender->getServer()->getUserByName(message.middle[2]);
 					// ERR_NOSUCHNICK
-					if (!user) {
+					if (!user || !channel->checkOnChannel(user)) {
 						return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[2]));
-					}
-					// ERR_NOTONCHANNEL
-					if (!channel->checkOnChannel(user)) {
-						return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(message.middle[0]));
 					}
 					if (sign == '+') {
 						channel->addOperator(user);
