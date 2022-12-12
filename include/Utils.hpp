@@ -31,8 +31,8 @@
 # define SERVER_VERSION	"2.8"
 # define ADMIN_HOST		"127.0.0.1"
 # define ADMIN_PASSWORD	"pass"
-# define PING_CHECK		15
-# define TIMEOUT		15
+# define PING_CHECK		150
+# define TIMEOUT		150
 
 # define FLAG_CHANNEL_O	1
 # define FLAG_CHANNEL_P	2
@@ -89,6 +89,7 @@ std::string TIME(const Message &message, User *sender);
 std::string ADMIN(const Message &message, User *sender);
 std::string INFO(const Message &message, User *sender);
 std::string KILL(const Message &message, User *sender);
+std::string WHO(const Message &message, User *sender);
 std::string WHOIS(const Message &message, User *sender);
 std::string WHOWAS(const Message &message, User *sender);
 std::string PRIVMSG(const Message &message, User *sender);
@@ -149,7 +150,7 @@ std::string RPL_TOPIC(const std::string &channel, const std::string &topic);
 std::string RPL_INVITING(const std::string &channel, const std::string &nickname);
 std::string RPL_SUMMONING(const std::string &user);
 std::string RPL_VERSION(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &comments);
-std::string RPL_WHOREPLY(const std::string &channel, const std::string &user, const std::string &host, const std::string &server, const std::string &nickname, const std::string &hops, const std::string &realname);
+std::string RPL_WHOREPLY(const std::string &channel, const std::string &user, const std::string &host, const std::string &server, const std::string &nickname, const std::string &realname);
 std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist);
 std::string RPL_LINKS(const std::string &mask, const std::string &server, const std::string &hopcount, const std::string &serverinfo);
 std::string RPL_ENDOFLINKS(const std::string &mask);

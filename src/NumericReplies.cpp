@@ -45,6 +45,11 @@ std::string RPL_WHOWASUSER(const std::string &nickname, const std::string &usern
 	return nickname + " " + username + " " + hostname + " * :" + realname;
 }
 
+// 315
+std::string RPL_ENDOFWHO(const std::string &name) {
+	return name + " :End of /WHO list";
+}
+
 // 317
 std::string RPL_WHOISIDLE(const std::string &nickname, int seconds) {
 	std::stringstream ss;
@@ -96,6 +101,11 @@ std::string RPL_INVITING(const std::string &channel, const std::string &nickname
 // 351
 std::string RPL_VERSION(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &comments) {
 	return version + "." + debuglevel + " " + server + " :" + comments;
+}
+
+// 352
+std::string RPL_WHOREPLY(const std::string &channel, const std::string &user, const std::string &host, const std::string &server, const std::string &nickname, const std::string &realname) {
+	return channel + " " + user + " " + host + " " + server + " " + nickname + " " + realname;
 }
 
 // 353

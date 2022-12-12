@@ -37,6 +37,7 @@ class Server {
 		std::vector<std::string>			getChannelNames(void);
 		std::string							getStartTime(void);
 		std::string							getServerVersion(void);
+		User										*getUserByFd(int fd);
 
 		void		run(bool &stop);
 		void		loop(void);

@@ -20,6 +20,7 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("ADMIN")] = ADMIN;
 	_executor[std::string("INFO")] = INFO;
 	_executor[std::string("KILL")] = KILL;
+	_executor[std::string("WHO")] = WHO;
 	_executor[std::string("WHOIS")] = WHOIS;
 	_executor[std::string("WHOWAS")] = WHOWAS;
 	_executor[std::string("PRIVMSG")] = PRIVMSG;
@@ -79,6 +80,10 @@ std::string Server::getServerVersion(void) {
 
 std::string Server::getStartTime(void) {
 	return _start_time;
+}
+
+User	*Server::getUserByFd(int fd) {
+	return _users[fd];
 }
 
 void Server::run(bool &stop) {
