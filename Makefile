@@ -36,6 +36,8 @@ FUNC			=	main \
 					Commands/KILL \
 					Commands/PRIVMSG \
 					Commands/NOTICE \
+					Commands/PING \
+					Commands/PONG \
 
 INC = ./include
 

@@ -43,6 +43,7 @@
 # define FLAG_CHANNEL_K	256
 # define FLAG_USER_I	1
 # define FLAG_USER_O	2
+# define FLAG_USER_P	4
 
 // User Status
 enum UserStatus {
@@ -87,6 +88,8 @@ std::string INFO(const Message &message, User *sender);
 std::string KILL(const Message &message, User *sender);
 std::string PRIVMSG(const Message &message, User *sender);
 std::string NOTICE(const Message &message, User *sender);
+std::string PING(const Message &message, User *sender);
+std::string PONG(const Message &message, User *sender);
 
 // Numeric Replies
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
