@@ -45,7 +45,7 @@ void	WHOISONE(std::string sender_prefix, std::string nickname, User *sender, Ser
 				), sender);
 
 			// 313 RPL_WHOISOPERATOR
-			if (it->second->getMode() & FLAG_CHANNEL_O) {
+			if (it->second->getMode() & FLAG_USER_O) {
 				server->sendMsg(
 					join(sender_prefix, "313", sender->getNickname(),
 					RPL_WHOISOPERATOR(nickname)
