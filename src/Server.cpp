@@ -10,6 +10,7 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("QUIT")] = QUIT;
 	_executor[std::string("JOIN")] = JOIN;
 	_executor[std::string("PART")] = PART;
+	_executor[std::string("MODE")] = MODE;
 	_executor[std::string("TOPIC")] = TOPIC;
 	_executor[std::string("NAMES")] = NAMES;
 	_executor[std::string("LIST")] = LIST;
@@ -124,29 +125,21 @@ void Server::loop(void) {
 		for (std::vector<pollfd>::iterator socket = _sockets.begin(); socket != _sockets.end(); socket++) {
 			if ((*socket).revents == POLLIN) {
 				receiveMsg((*socket).fd);
-				_users[(*socket).fd]->setLastCmdTime();
-				_users[(*socket).fd]->setStatus(REGISTERED);
 			}
 		}
 	}
 
-	// check user and send ping
+	// check user and send ping + check user received ping
 	for (std::map<int, User *>::iterator it = _users.begin();it != _users.end();it++) {
 		User *user = (*it).second;
 		time_t now = time(0);
-		if (user->getStatus() < REGISTERED) {
-			continue;
-		}
-		if (now - user->getLastCmdTime() > PING_CHECK && user->getStatus() != NEED_PONG) {
-			_executor["PING"](Message(), user);
-		}
-	}
 
-	// check user received ping
-	for (std::map<int, User *>::iterator it = _users.begin();it != _users.end();it++) {
-		User *user = (*it).second;
-		if (user->getStatus() == NEED_PONG) {
-			time_t now = time(0);
+		if (user->getStatus() == REGISTERED) {
+			if (now - user->getLastCmdTime() > PING_CHECK) {
+				_executor["PING"](Message(), user);
+			}
+		}
+		else if (user->getStatus() == NEED_PONG) {
 			if (now - user->getPingTime() > TIMEOUT) {
 				_quitters.push_back(user->getUserSocket());
 			}
@@ -225,16 +218,15 @@ void Server::runCommand(const Message &message, User *user) {
 	if (DEBUG) {
 		std::cout << message << std::endl;
 	}
-	if (_executor.find(message.command) != _executor.end()) {
-		if ((user->getStatus() == NEED_PASSWORD && message.command != "PASS")
+	if ((user->getStatus() == NEED_PASSWORD && message.command != "PASS")
 			|| (user->getStatus() == NEED_NICKNAME && message.command != "PASS" && message.command != "NICK")
 			|| (user->getStatus() == NEED_USERREGISTER && message.command != "PASS" && message.command != "NICK" && message.command != "USER"))
 			{
 				sendMsg(join(user->getServer()->getServername(), "451", user->getNickname(), ERR_NOTREGISTERED()), user);
+				return ;
 		}
-		else {
-			sendMsg(_executor[message.command](message, user), user);
-		}
+	if (_executor.find(message.command) != _executor.end()) {
+		sendMsg(_executor[message.command](message, user), user);
 	}
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
@@ -243,6 +235,8 @@ void Server::runCommand(const Message &message, User *user) {
 		std::cout << "nickname: " << user->getNickname() << std::endl;
 		std::cout << user->getNickHistory() << std::endl;
 	}
+	user->setLastCmdTime();
+	user->setStatus(REGISTERED);
 }
 
 void Server::sendMsg(const std::string &message, User *user) {

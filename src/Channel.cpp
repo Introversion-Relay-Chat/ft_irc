@@ -4,9 +4,9 @@ Channel::Channel(std::string channelname, User *user) {
 	_channelname = channelname;
 	_topic = std::string();
 	_key = std::string();
-	_operator = user->getUserSocket();
-	_limit = 100;
-	_mode = 0;
+	_operators.insert(user->getUserSocket());
+	_limit = DEFAULT_LIMIT;
+	_mode = FLAG_CHANNEL_N;
 	_users.insert(user->getUserSocket());
 }
 
@@ -33,12 +33,24 @@ void Channel::setKey(std::string key) {
 	_key = key;
 }
 
-int Channel::getOperator(void) {
-	return _operator;
+std::set<int> Channel::getOperators(void) {
+	return _operators;
 }
 
-void Channel::setOperator(int op) {
-	_operator = op;
+void Channel::addOperator(User *user) {
+	_operators.insert(user->getUserSocket());
+}
+
+void Channel::addOperator(int user_socket) {
+	_operators.insert(user_socket);
+}
+
+void Channel::removeOperator(User *user) {
+	_operators.erase(user->getUserSocket());
+}
+
+void Channel::removeOperator(int user_socket) {
+	_operators.erase(user_socket);
 }
 
 int Channel::getLimit(void) {
@@ -51,6 +63,10 @@ void Channel::setLimit(int limit) {
 
 int Channel::getMode(void) {
 	return _mode;
+}
+
+void Channel::setMode(int mode) {
+	_mode = mode;
 }
 
 std::set<int> Channel::getUsers(void) {
@@ -70,7 +86,7 @@ std::string Channel::getUserList(User *user) {
 		if (server_users[*it]->getMode() & FLAG_USER_I) {
 			continue ;
 		}
-		if (*it == _operator) {
+		if (checkPrivilege(server_users[*it])) {
 			userlist += "@" + server_users[*it]->getNickname() + " ";
 		}
 		else {
@@ -101,6 +117,7 @@ void Channel::addUser(User *user) {
 
 void Channel::removeUser(User *user) {
 	_users.erase(user->getUserSocket());
+	removeOperator(user);
 }
 
 void Channel::inviteUser(User *user) {
@@ -135,7 +152,7 @@ bool Channel::checkVisible(User *user) {
 }
 
 bool Channel::checkPrivilege(User *user) {
-	if (user->getUserSocket() != _operator) {
+	if (_operators.find(user->getUserSocket()) == _operators.end()) {
 		return false;
 	}
 	return true;
