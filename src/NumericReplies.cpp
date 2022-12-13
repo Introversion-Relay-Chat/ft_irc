@@ -80,6 +80,16 @@ std::string RPL_ENDOFNAMES(const std::string &channel) {
 	return channel + " :End of /NAMES list";
 }
 
+// 367
+std::string RPL_BANLIST(const std::string &channel, const std::string &banmask) {
+	return channel + " " + banmask;//"<channel> <banid>"
+}
+
+// 368
+std::string RPL_ENDOFBANLIST(const std::string &channel) {
+	return channel + " :End of channel ban list";
+}
+
 // 371
 std::string RPL_INFO(const std::string &string) {
 	return ":" + string;

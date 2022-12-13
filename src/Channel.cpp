@@ -111,6 +111,20 @@ int Channel::getVisibleUsers(User *user) {
 	return size;
 }
 
+std::set<std::string> Channel::getBanList(void) {
+	return _banlist;
+}
+
+void Channel::setBanMask(std::string mask) {
+	_banlist.insert(mask);
+}
+
+void Channel::removeBanMask(std::string mask) {
+	if (_banlist.find(mask) != _banlist.end()) {
+		_banlist.erase(mask);
+	}
+}
+
 void Channel::addUser(User *user) {
 	_users.insert(user->getUserSocket());
 }

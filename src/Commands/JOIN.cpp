@@ -48,14 +48,16 @@ std::string JOIN(const Message &message, User *sender) {
 			}
 		}
 
-		/*
+		
 		// 2. nick/username/hostname not in active bans.
 		// ERR_BANNEDFROMCHAN
-		std::set<int> banlist = channel->getBanlist();
-		if (channel->getModes & FLAG_CHANNEL_B)
-			if (banlist.find(sender->getUserSocket()) != banlist.end())
-				return join(sender->getServerPrefix(), "474", sender->getNickname(), message);
-		*/
+		std::set<std::string> banlist = channel->getBanList();
+		if (channel->getMode() & FLAG_CHANNEL_B) {
+			if (checkMask(banlist, sender->getUserPrefix())) {
+				sender->getServer()->sendMsg(join(sender_prefix, "474", target, ERR_BANNEDFROMCHAN(channels[i])), sender);
+				continue ;
+			}
+		}
 
 		// 3. passowrd if needed
 		// ERR_BADCHANNELKEY

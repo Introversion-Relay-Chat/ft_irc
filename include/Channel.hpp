@@ -18,6 +18,7 @@ class Channel {
 		int						_mode;
 		std::set<int>			_users;
 		std::set<int>			_invited;
+		std::set<std::string>	_banlist;
 
 	public:
 		Channel(std::string channelname, User *user);
@@ -41,6 +42,9 @@ class Channel {
 		std::set<int>			getInvited(void);
 		std::string				getUserList(User *user);
 		int						getVisibleUsers(User *user);
+		std::set<std::string>	getBanList(void);
+		void					setBanMask(std::string mask);
+		void					removeBanMask(std::string mask);
 
 		void					addUser(User *user);
 		void					removeUser(User *user);
