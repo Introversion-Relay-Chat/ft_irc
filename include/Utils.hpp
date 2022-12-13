@@ -69,6 +69,7 @@ std::vector<std::string>	split(std::string str, std::string delimiter);
 std::string					join(std::string sender_prefix, std::string code, std::string target, std::string message);
 std::string					toString(int var);
 std::ostream& operator<<(std::ostream& os, const Message& message);
+bool						checkMask(std::set<std::string> banlist, std::string host);
 
 // Commands
 std::string PASS(const Message &message, User *sender);
