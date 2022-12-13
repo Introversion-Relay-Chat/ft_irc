@@ -71,6 +71,7 @@ std::string					toString(int var);
 std::ostream& operator<<(std::ostream& os, const Message& message);
 std::ostream& operator<<(std::ostream& os, const std::map<std::string, time_t>& nick_history);
 std::string currTime(void);
+bool						checkMask(std::set<std::string> banlist, std::string host);
 
 // Commands
 std::string PASS(const Message &message, User *sender);

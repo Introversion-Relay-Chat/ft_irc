@@ -235,8 +235,10 @@ void Server::runCommand(const Message &message, User *user) {
 		std::cout << "nickname: " << user->getNickname() << std::endl;
 		std::cout << user->getNickHistory() << std::endl;
 	}
-	user->setLastCmdTime();
-	user->setStatus(REGISTERED);
+	if (user->getStatus() >= REGISTERED) {
+		user->setLastCmdTime();
+		user->setStatus(REGISTERED);
+	}
 }
 
 void Server::sendMsg(const std::string &message, User *user) {

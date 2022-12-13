@@ -131,6 +131,14 @@ std::string RPL_ENDOFNAMES(const std::string &channel) {
 // 369
 std::string RPL_ENDOFWHOWAS(const std::string &nickname) {
 	return nickname + " :End of WHOWAS";
+// 367
+std::string RPL_BANLIST(const std::string &channel, const std::string &banmask) {
+	return channel + " " + banmask;//"<channel> <banid>"
+}
+
+// 368
+std::string RPL_ENDOFBANLIST(const std::string &channel) {
+	return channel + " :End of channel ban list";
 }
 
 // 371
