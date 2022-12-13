@@ -142,11 +142,13 @@ std::string MODE(const Message &message, User *sender) {
 						if (message.middle.size() < 3)
 							sender->getServer()->sendMsg(join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command)), sender);
 						// ERR_KEYSET
-						if (channel->getKey().length() > 0) {
+						else if (channel->getKey().length() > 0) {
 							sender->getServer()->sendMsg(join(sender_prefix, "467", target, ERR_KEYSET(name)), sender);
 						}
-						channel->setKey(message.middle[2]);
-						channel->setMode(channel->getMode() | FLAG_CHANNEL_K);
+						else {
+							channel->setKey(message.middle[2]);
+							channel->setMode(channel->getMode() | FLAG_CHANNEL_K);
+						}
 					}
 					else if (sign == '-') {
 						channel->setKey("");
@@ -157,34 +159,34 @@ std::string MODE(const Message &message, User *sender) {
 		
 		}
 		// RPL_CHANNELMODEIS opsitnlbk
-		if (user->getMode() | FLAG_CHANNEL_O) {
+		if (channel->getMode() & FLAG_CHANNEL_O) {
 			mode += "o";
 			mode_params += "o: <operator>";
 		}
-		if (user->getMode() | FLAG_CHANNEL_P) {
+		if (channel->getMode() & FLAG_CHANNEL_P) {
 			mode += "p";
 		}
-		if (user->getMode() | FLAG_CHANNEL_S) {
+		if (channel->getMode() & FLAG_CHANNEL_S) {
 			mode += "s";
 		}
-		if (user->getMode() | FLAG_CHANNEL_I) {
+		if (channel->getMode() & FLAG_CHANNEL_I) {
 			mode += "i";
 		}
-		if (user->getMode() | FLAG_CHANNEL_T) {
+		if (channel->getMode() & FLAG_CHANNEL_T) {
 			mode += "t";
 		}
-		if (user->getMode() | FLAG_CHANNEL_N) {
+		if (channel->getMode() & FLAG_CHANNEL_N) {
 			mode += "n";
 		}
-		if (user->getMode() | FLAG_CHANNEL_B) {
+		if (channel->getMode() & FLAG_CHANNEL_B) {
 			mode += "b";
 			mode_params += "b: <banmask>";
 		}
-		if (user->getMode() | FLAG_CHANNEL_L) {
+		if (channel->getMode() & FLAG_CHANNEL_L) {
 			mode += "l";
 			mode_params += "l: " + toString(channel->getLimit()) + " ";
 		}
-		if (user->getMode() | FLAG_CHANNEL_K) {
+		if (channel->getMode() & FLAG_CHANNEL_K) {
 			mode += "k";
 			mode_params += "k: " + channel->getKey() + " ";
 		}
@@ -226,10 +228,10 @@ std::string MODE(const Message &message, User *sender) {
 			}
 		}
 		// RPL_UMODEIS
-		if (user->getMode() | FLAG_USER_I) {
+		if (user->getMode() & FLAG_USER_I) {
 			mode += "i";
 		}
-		if (user->getMode() | FLAG_USER_O) {
+		if (user->getMode() & FLAG_USER_O) {
 			mode += "o";
 		}
 		return join(sender_prefix, "221", target, RPL_UMODEIS(mode));
