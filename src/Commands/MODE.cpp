@@ -10,6 +10,7 @@ std::string MODE(const Message &message, User *sender) {
 	std::string											flags;
 	std::string											mode;
 	std::string											mode_params;
+	std::set<std::string>								banlist;
 	
 
 	sender_prefix = sender->getServerPrefix();
@@ -137,19 +138,11 @@ std::string MODE(const Message &message, User *sender) {
 					}
 					break ;
 				case 'b':
-           			if (sign == '+') {
+					if (sign == '+') {
 						if (message.middle.size() < 2) {
 							return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
 						}
-						if (message.middle.size() < 3) {
-							// RPL_BANLIST
-							std::set<std::string> banlist = channel->getBanList();
-							for (std::set<std::string>::iterator it = banlist.begin();it != banlist.end();it++) {
-								sender->getServer()->sendMsg(join(sender_prefix, "367", target, RPL_BANLIST(name, *it)), sender);
-							}
-							// RPL_ENDOFBANLIST
-							sender->getServer()->sendMsg(join(sender_prefix, "368", target, RPL_ENDOFBANLIST(name)), sender);
-						} else {
+						if (message.middle.size() >= 3) {
 							channel->setBanMask(message.middle[2]);
 							channel->setMode(channel->getMode() | FLAG_CHANNEL_B);
 						}
@@ -159,8 +152,17 @@ std::string MODE(const Message &message, User *sender) {
 							return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
 						}
 						channel->removeBanMask(message.middle[2]);
-						channel->setMode(channel->getMode() & ~FLAG_CHANNEL_B);
+						if (channel->getBanList().empty()) {
+							channel->setMode(channel->getMode() & ~FLAG_CHANNEL_B);
+						}
 					}
+					// RPL_BANLIST
+					banlist = channel->getBanList();
+					for (std::set<std::string>::iterator it = banlist.begin();it != banlist.end();it++) {
+						sender->getServer()->sendMsg(join(sender_prefix, "367", target, RPL_BANLIST(name, *it)), sender);
+					}
+					// RPL_ENDOFBANLIST
+					sender->getServer()->sendMsg(join(sender_prefix, "368", target, RPL_ENDOFBANLIST(name)), sender);
 					break ;
 				case 'k':
 					if (sign == '+') {
@@ -182,8 +184,7 @@ std::string MODE(const Message &message, User *sender) {
 						channel->setMode(channel->getMode() & ~FLAG_CHANNEL_K);
 					}
 					break ;
-				}
-		
+			}
 		}
 		// RPL_CHANNELMODEIS opsitnlbk
 		if (channel->getMode() & FLAG_CHANNEL_O) {
