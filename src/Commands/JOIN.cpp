@@ -1,6 +1,5 @@
 #include "../../include/Utils.hpp"
 
-// TODO: banmask related job;
 std::string JOIN(const Message &message, User *sender) {
 	std::string							sender_prefix = sender->getServerPrefix();
 	std::string							target = sender->getNickname();
@@ -11,18 +10,20 @@ std::string JOIN(const Message &message, User *sender) {
 	std::string							userlist;
 
 	// ERR_NEEDMOREPARAMS
-	if (message.middle.size() < 1)
+	if (message.middle.size() < 1) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
+	}
 
 	channels = split(message.middle[0], ",");
-	if (message.middle.size() >= 2)
+	if (message.middle.size() >= 2) {
 		keys = split(message.middle[1], ",");
-	while (keys.size() < channels.size())
+	}
+	while (keys.size() < channels.size()) {
 		keys.push_back(std::string());
+	}
 
 	for (unsigned long i=0; i < channels.size(); i++){
 		channel = sender->getServer()->getChannelByName(channels[i]);
-		// create channel if doesnt exist
 		if (!channel) {
 			// ERR_TOOMANYCHANNELS
 			if (static_cast<int>(sender->getServer()->getChannels().size()) >= MAX_CHANNEL) {
@@ -39,7 +40,6 @@ std::string JOIN(const Message &message, User *sender) {
 			continue ;
 		}
 
-		// 1. invite-only
 		// ERR_INVITEONLYCHAN
 		if (channel->getMode() & FLAG_CHANNEL_I) {
 			if (!channel->checkInvited(sender)) {
@@ -48,8 +48,6 @@ std::string JOIN(const Message &message, User *sender) {
 			}
 		}
 
-		
-		// 2. nick/username/hostname not in active bans.
 		// ERR_BANNEDFROMCHAN
 		std::set<std::string> banlist = channel->getBanList();
 		if (channel->getMode() & FLAG_CHANNEL_B) {
@@ -59,7 +57,6 @@ std::string JOIN(const Message &message, User *sender) {
 			}
 		}
 
-		// 3. passowrd if needed
 		// ERR_BADCHANNELKEY
 		if (channel->getMode() & FLAG_CHANNEL_K) {
 			if (keys[i] != channel->getKey()) {
@@ -68,21 +65,20 @@ std::string JOIN(const Message &message, User *sender) {
 			}
 		}
 
-		// validation
 		if (channels[i][0] != '#') {
 			continue ;
 		}
-
-		// join channel
 		channel->addUser(sender);
 		sender->joinChannel(channels[i]);
 
 		topic = channel->getTopic();
 		// RPL_TOPIC
-		if (topic.length())
+		if (topic.length()) {
 			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_TOPIC(channels[i], topic)), sender);
-		else
+		}
+		else {
 			sender->getServer()->sendMsg(join(sender_prefix, "331", target, RPL_NOTOPIC(channels[i])), sender);
+		}
 
 		// RPL_NAMREPLY
 		userlist = channel->getUserList(sender);

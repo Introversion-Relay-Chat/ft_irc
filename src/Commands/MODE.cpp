@@ -10,20 +10,21 @@ std::string MODE(const Message &message, User *sender) {
 	std::string											flags;
 	std::string											mode;
 	std::string											mode_params;
+	std::set<int>										operators;
 	std::set<std::string>								banlist;
 	
 
 	sender_prefix = sender->getServerPrefix();
 	target = sender->getNickname();
 	// ERR_NEEDMOREPARAMS
-	if (message.middle.size() < 2)
+	if (message.middle.size() < 2) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
+	}
 
 	name = message.middle[0];
 	channel = sender->getServer()->getChannelByName(name);
 	user = sender->getServer()->getUserByName(name);
 	flags = message.middle[1];
-	// channel mode 
 	if (channel) {
 		// ERR_NOTONCHANNEL
 		if (!channel->checkOnChannel(sender)) {
@@ -70,7 +71,8 @@ std::string MODE(const Message &message, User *sender) {
 						user = sender->getServer()->getUserByName(message.middle[2]);
 						// ERR_NOSUCHNICK
 						if (!user || !channel->checkOnChannel(user)) {
-							return join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[2]));
+							sender->getServer()->sendMsg(join(sender_prefix, "401", target, ERR_NOSUCHNICK(message.middle[2])), sender);
+							break ;
 						}
 						if (sign == '+') {
 							channel->addOperator(user);
@@ -138,19 +140,16 @@ std::string MODE(const Message &message, User *sender) {
 					}
 					break ;
 				case 'b':
+					// ERR_NEEDMOREPARAMS
+					if (message.middle.size() < 3) {
+						sender->getServer()->sendMsg(join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command)), sender);
+						break ;
+					}
 					if (sign == '+') {
-						if (message.middle.size() < 2) {
-							return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
-						}
-						if (message.middle.size() >= 3) {
-							channel->setBanMask(message.middle[2]);
-							channel->setMode(channel->getMode() | FLAG_CHANNEL_B);
-						}
+						channel->setBanMask(message.middle[2]);
+						channel->setMode(channel->getMode() | FLAG_CHANNEL_B);
 					}
 					else if (sign == '-') {
-						if (message.middle.size() < 3) {
-							return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
-						}
 						channel->removeBanMask(message.middle[2]);
 						if (channel->getBanList().empty()) {
 							channel->setMode(channel->getMode() & ~FLAG_CHANNEL_B);
@@ -186,10 +185,9 @@ std::string MODE(const Message &message, User *sender) {
 					break ;
 			}
 		}
-		// RPL_CHANNELMODEIS opsitnlbk
+		// RPL_CHANNELMODEIS
 		if (channel->getMode() & FLAG_CHANNEL_O) {
 			mode += "o";
-			mode_params += "o: <operator>";
 		}
 		if (channel->getMode() & FLAG_CHANNEL_P) {
 			mode += "p";
@@ -208,19 +206,15 @@ std::string MODE(const Message &message, User *sender) {
 		}
 		if (channel->getMode() & FLAG_CHANNEL_B) {
 			mode += "b";
-			mode_params += "b: <banmask>";
 		}
 		if (channel->getMode() & FLAG_CHANNEL_L) {
 			mode += "l";
-			mode_params += "l: " + toString(channel->getLimit()) + " ";
 		}
 		if (channel->getMode() & FLAG_CHANNEL_K) {
 			mode += "k";
-			mode_params += "k: " + channel->getKey() + " ";
 		}
-		return join(sender_prefix, "324", target, RPL_CHANNELMODEIS(name, mode, mode_params));
+		return join(sender_prefix, "324", target, RPL_CHANNELMODEIS(name, mode));
 	}
-	// user mode
 	else if (user) {
 		// ERR_USERSDONTMATCH
 		if (user != sender) {

@@ -1,6 +1,5 @@
 #include "../../include/Utils.hpp"
 
-// TODO: ERR_BADCHANMASK
 std::string KICK(const Message &message, User *sender) {
 	std::string							sender_prefix;
 	std::string							target;
@@ -11,8 +10,9 @@ std::string KICK(const Message &message, User *sender) {
 	sender_prefix = sender->getServerPrefix();
 	target = sender->getNickname();
 	// ERR_NEEDMOREPARAMS
-	if (message.middle.size() < 2)
+	if (message.middle.size() < 2) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
+	}
 
 	user = sender->getServer()->getUserByName(message.middle[1]);
 	channel = sender->getServer()->getChannelByName(message.middle[0]);
@@ -37,9 +37,6 @@ std::string KICK(const Message &message, User *sender) {
 		return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(message.middle[0]));
 	}
 
-	// ERR_BADCHANMASK pass
-
-	// kick user
 	channel->kickUser(user);
 
 	sender_prefix = sender->getUserPrefix();
