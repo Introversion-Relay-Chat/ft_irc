@@ -63,39 +63,62 @@ std::string currTime(void) {
 	local_time_str.erase(--local_time_str.end());
 	return local_time_str;
 }
-bool isIncluded(std::string ban, std::string user) {
-	size_t u = 0, i = 0;
 
-	while (i < ban.length()) {
-		if (ban[i] == '*') {
-			while (++i < ban.length()) {
-				if (!(ban[i] == '*' || ban[i] == '?')) {
-					break;
-				}
-			}
-			if (i == ban.length()) {
+// bool isIncluded(std::string pattern, std::string target) {
+// 	size_t u = 0, i = 0;
+
+// 	while (i < pattern.length()) {
+// 		if (pattern[i] == '*') {
+// 			while (++i < pattern.length()) {
+// 				if (!(pattern[i] == '*' || pattern[i] == '?')) {
+// 					break;
+// 				}
+// 			}
+// 			if (i == pattern.length()) {
+// 				return true;
+// 			}
+// 			while (pattern[i] != target[u]) {
+// 				if (u == target.length()) {
+// 					return false;
+// 				}
+// 				u++;
+// 			}
+// 		} else if (pattern[i] == '?') {
+// 			if (u == target.length()) {
+// 				return false;
+// 			}
+// 			u++;
+// 		} else {
+// 			if (u == target.length() || pattern[i] != target[u]) {
+// 				return false;
+// 			}
+// 			u++;
+// 		}
+// 		i++;
+// 	}
+// 	return true;
+// }
+
+bool confirmMatch(std::string pattern, std::string target) {
+	size_t cur = 0;
+	while (cur < target.length() && cur < pattern.length()
+	&& (pattern[cur] == '?' || pattern[cur] == target[cur])) {
+		++cur;
+	}
+
+	if (cur == pattern.length()) {
+		return cur == target.size();
+	}
+
+	if (pattern[cur] == '*') {
+		for (size_t i = 0; cur + i <= target.length(); ++i)
+		{
+			if (confirmMatch(pattern.substr(cur + 1), target.substr(cur + i))) {
 				return true;
 			}
-			while (ban[i] != user[u]) {
-				if (u == user.length()) {
-					return false;
-				}
-				u++;
-			}
-		} else if (ban[i] == '?') {
-			if (u == user.length()) {
-				return false;
-			}
-			u++;
-		} else {
-			if (u == user.length() || ban[i] != user[u]) {
-				return false;
-			}
-			u++;
 		}
-		i++;
 	}
-	return true;
+	return false;
 }
 
 bool checkMask(std::set<std::string> banlist, std::string prefix) {
@@ -105,10 +128,14 @@ bool checkMask(std::set<std::string> banlist, std::string prefix) {
 	std::string bannick;
 	std::string banuser;
 
+	std::cout << "user: " << user << std::endl;
+	std::cout << "nickname: " << nickname << std::endl;
+	std::cout << "username: " << username << std::endl;
 	for (std::set<std::string>::iterator it = banlist.begin();it != banlist.end();it++) {
 		bannick = (*it).substr(0, (*it).find("!", 0));
 		banuser = (*it).substr((*it).find("!", 0) + 1);
-		if (isIncluded(bannick, nickname) && isIncluded(banuser, banuser)) {
+		if (confirmMatch(bannick, nickname) && confirmMatch(bannick, username)) {
+		// if (isIncluded(bannick, nickname) && isIncluded(banuser, banuser)) {
 			return true;
 		}
 	}

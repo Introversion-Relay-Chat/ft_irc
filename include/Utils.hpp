@@ -20,6 +20,7 @@
 # include <poll.h>
 # include <unistd.h>
 # include <ctime>
+# include <regex>
 # include "Server.hpp"
 # include "User.hpp"
 # include "Channel.hpp"
@@ -71,6 +72,8 @@ std::string					toString(int var);
 std::ostream& operator<<(std::ostream& os, const Message& message);
 std::ostream& operator<<(std::ostream& os, const std::map<std::string, time_t>& nick_history);
 std::string currTime(void);
+bool isIncluded(std::string pattern, std::string target);
+bool	confirmMatch(std::string w, std::string s);
 bool						checkMask(std::set<std::string> banlist, std::string host);
 
 // Commands
