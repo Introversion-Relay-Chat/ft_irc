@@ -58,7 +58,7 @@ std::string WHO(const Message &message, User *sender) {
 	std::map<std::string, Channel *> channels = server->getChannels();
 	for (std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); it++) {
 		Channel *channel = it->second;
-		if (channel->getChannelname() == name) {
+		if (confirmMatch(name, channel->getChannelname())) {
 			std::set<int> user_fds = channel->getUsers();
 			for (std::set<int>::iterator it = user_fds.begin(); it != user_fds.end(); it++) {
 				User *target_user = server->getUserByFd(*it);
@@ -78,14 +78,16 @@ std::string WHO(const Message &message, User *sender) {
 		}
 	}
 
-	// name과 일치하는 채널이 없으면 서버에서 hostname or realname or nickname과 일치하는 유저들을 응답한다.
+	// name과 일치하는 채널이 없으면 서버에서 hostname or realname or nickname과 패턴이 일치하는 유저들을 응답한다.
 	std::map<int, User *> users = server->getUsers();
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
 		User *target_user = it->second;
 		if (is_op && !(target_user->getMode() & FLAG_USER_O)) {
 			continue;
 		}
-		if (target_user->getHostname() == name || target_user->getRealname() == name || target_user->getNickname() == name) {
+			if (confirmMatch(name, target_user->getHostname())
+			|| confirmMatch(name, target_user->getRealname())
+			|| confirmMatch(name, target_user->getNickname())) {
 			// 352 RPL_WHOREPLY
 			server->sendMsg(
 				join(sender_prefix, "352", sender->getNickname(),

@@ -128,9 +128,6 @@ bool checkMask(std::set<std::string> banlist, std::string prefix) {
 	std::string bannick;
 	std::string banuser;
 
-	std::cout << "user: " << user << std::endl;
-	std::cout << "nickname: " << nickname << std::endl;
-	std::cout << "username: " << username << std::endl;
 	for (std::set<std::string>::iterator it = banlist.begin();it != banlist.end();it++) {
 		bannick = (*it).substr(0, (*it).find("!", 0));
 		banuser = (*it).substr((*it).find("!", 0) + 1);

@@ -3,7 +3,7 @@
 void	WHOISONE(std::string sender_prefix, std::string nickname, User *sender, Server *server) {
 	std::map<int, User *> users = server->getUsers();
 	for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
-		if (it->second->getNickname() == nickname) {
+			if (confirmMatch(nickname, it->second->getNickname())) {
 			User *user = it->second;
 			std::string nickname = user->getNickname();
 			std::string hostname = user->getHostname();
