@@ -24,7 +24,6 @@ std::string TOPIC(const Message &message, User *sender) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(channel_name));
 	}
 
-	// change topic
 	if (message.trailing.length() > 0) {
 		topic = message.trailing;
 		// ERR_CHANOPRIVSNEEDED
@@ -33,7 +32,6 @@ std::string TOPIC(const Message &message, User *sender) {
 		}
 		channel->setTopic(topic);
 	}
-	// return topic
 	else {
 		topic = channel->getTopic();
 		// RPL_TOPIC

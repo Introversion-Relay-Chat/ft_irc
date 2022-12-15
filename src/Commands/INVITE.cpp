@@ -10,8 +10,9 @@ std::string INVITE(const Message &message, User *sender) {
 	sender_prefix = sender->getServerPrefix();
 	target = sender->getNickname();
 	// ERR_NEEDMOREPARAMS
-	if (message.middle.size() < 2)
+	if (message.middle.size() < 2) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
+	}
 
 	user = sender->getServer()->getUserByName(message.middle[0]);
 	channel = sender->getServer()->getChannelByName(message.middle[1]);
@@ -34,7 +35,6 @@ std::string INVITE(const Message &message, User *sender) {
 		return join(sender_prefix, "443", target, ERR_USERONCHANNEL(message.middle[0], message.middle[1]));
 	}
 
-	// invite
 	channel->inviteUser(user);
 
 	// RPL_INVITING

@@ -89,8 +89,8 @@ std::string RPL_LISTEND(void) {
 }
 
 // 324
-std::string RPL_CHANNELMODEIS(const std::string &channel, const std::string &mode, const std::string &mode_params) {
-	return channel + " " + mode + " " + mode_params;
+std::string RPL_CHANNELMODEIS(const std::string &channel, const std::string &mode) {
+	return channel + " " + mode;
 }
 
 // 331

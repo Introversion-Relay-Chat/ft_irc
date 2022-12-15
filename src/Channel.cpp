@@ -145,6 +145,9 @@ void Channel::kickUser(User *user) {
 	if (_users.size() == 0) {
 		user->getServer()->deleteChannel(_channelname);
 	}
+	else if (_operators.size() == 0) {
+		addOperator(*(_users.begin()));
+	}
 }
 
 bool Channel::checkInvited(User *user) {

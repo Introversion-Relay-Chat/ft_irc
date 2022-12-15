@@ -7,8 +7,9 @@ std::string KILL(const Message &message, User *sender) {
 	User								*user;
 
 	// ERR_NEEDMOREPARAMS
-	if (message.middle.size() < 2)
+	if (message.middle.size() < 2) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
+	}
 	
 	// ERR_NOPRIVILEGES
 	if (!(sender->getMode() & FLAG_USER_O)) {
@@ -27,7 +28,6 @@ std::string KILL(const Message &message, User *sender) {
 		return join(sender_prefix, "483", target, ERR_CANTKILLSERVER());
 	}
 
-	// kill user
 	sender->getServer()->killUser(user);
 
 	return std::string();

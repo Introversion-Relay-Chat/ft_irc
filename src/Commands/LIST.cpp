@@ -8,11 +8,9 @@ std::string LIST(const Message &message, User *sender) {
 	std::string							topic;
 	std::string							visible;
 
-	// return all channels
 	if (message.middle.size() < 1) {
 		channels = sender->getServer()->getChannelNames();
 	}
-	// return chosen channels
 	else {
 		channels = split(message.middle[0], ",");
 	}
@@ -23,14 +21,12 @@ std::string LIST(const Message &message, User *sender) {
 		channel = sender->getServer()->getChannelByName(channels[i]);
 		visible = toString(channel->getVisibleUsers(sender));
 		topic = channel->getTopic();
-		// pass if channel not exist
 		if (!channel) {
 			continue ;
 		}
 
 		// Secret
 		if (channel->getMode() & FLAG_CHANNEL_S) {
-			// pass if not on channel
 			if (!channel->checkOnChannel(sender)) {
 				continue ;
 			}
@@ -38,7 +34,6 @@ std::string LIST(const Message &message, User *sender) {
 
 		// Private
 		if (channel->getMode() & FLAG_CHANNEL_P) {
-			// hide topic if not on channel
 			if (!channel->checkOnChannel(sender)) {
 				// RPL_LIST
 				sender->getServer()->sendMsg(join(sender_prefix, "322", target, RPL_LIST("Prv", visible, "")), sender);

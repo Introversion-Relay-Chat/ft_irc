@@ -8,8 +8,9 @@ std::string PART(const Message &message, User *sender) {
 	Channel								*channel;
 
 	// ERR_NEEDMOREPARAMS
-	if (message.middle.size() < 1)
+	if (message.middle.size() < 1) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
+	}
 
 	channels = split(message.middle[0], ",");
 	for (unsigned long i=0; i < channels.size(); i++){
@@ -26,15 +27,7 @@ std::string PART(const Message &message, User *sender) {
 			continue ;
 		}
 
-		// leave channel
-		channel->removeUser(sender);
-		sender->leaveChannel(channels[i]);
-		if (channel->getUsers().size() == 0) {
-			sender->getServer()->deleteChannel(channels[i]);
-		}
-		else if (channel->getOperators().size() == 0) {
-			channel->addOperator(*(channel->getUsers().begin()));
-		}
+		channel->kickUser(sender);
 	}
 	return std::string();
 }
