@@ -30,6 +30,49 @@ std::string RPL_AWAY(const std::string &nickname, const std::string &message) {
 	return nickname + " :" + message;
 }
 
+// 311
+std::string RPL_WHOISUSER(const std::string &nickname, const std::string &username, const std::string &hostname, const std::string &realname) {
+	return nickname + " " + username + " " + hostname + " * :" + realname;
+}
+
+// 312
+std::string RPL_WHOISSERVER(const std::string &nickname, const std::string &server, const std::string &server_info) {
+	return nickname + " " + server + " :" + server_info;
+}
+
+// 313
+std::string RPL_WHOISOPERATOR(const std::string &nickname) {
+	return nickname + " :is an IRC operator";
+}
+
+// 314
+std::string RPL_WHOWASUSER(const std::string &nickname, const std::string &username, const std::string &hostname, const std::string &realname) {
+	return nickname + " " + username + " " + hostname + " * :" + realname;
+}
+
+// 315
+std::string RPL_ENDOFWHO(const std::string &name) {
+	return name + " :End of /WHO list";
+}
+
+// 317
+std::string RPL_WHOISIDLE(const std::string &nickname, int seconds) {
+	std::stringstream ss;
+	ss << seconds;
+	std::string seconds_str = ss.str();
+	return nickname + " " + seconds_str + " :seconds idle";
+}
+
+// 318
+std::string RPL_ENDOFWHOIS(const std::string &nickname) {
+	return nickname + " :End of /WHOIS list";
+}
+
+// 319
+std::string RPL_WHOISCHANNELS(const std::string &nickname, const std::string &channels) {
+	return nickname + " :" + channels;
+}
+
 // 321
 std::string RPL_LISTSTART(void) {
 	return "Channel :Topic";
@@ -70,6 +113,11 @@ std::string RPL_VERSION(const std::string &version, const std::string &debugleve
 	return version + "." + debuglevel + " " + server + " :" + comments;
 }
 
+// 352
+std::string RPL_WHOREPLY(const std::string &channel, const std::string &user, const std::string &host, const std::string &server, const std::string &nickname, const std::string &realname) {
+	return channel + " " + user + " " + host + " " + server + " " + nickname + " " + realname;
+}
+
 // 353
 std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist) {
 	return channel + " :" + userlist;
@@ -78,6 +126,11 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist
 // 366
 std::string RPL_ENDOFNAMES(const std::string &channel) {
 	return channel + " :End of /NAMES list";
+}
+
+// 369
+std::string RPL_ENDOFWHOWAS(const std::string &nickname) {
+	return nickname + " :End of WHOWAS";
 }
 
 // 367

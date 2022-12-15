@@ -19,6 +19,9 @@ class User {
 		std::string				_realname;
 		int						_mode;
 		std::set<std::string>	_joined;
+		std::map<std::string, time_t>	_nick_history;
+		time_t												_nick_update_time;
+		time_t	_login_time;
 		std::time_t				_last_cmd_time;
 		std::time_t				_ping_time;
 
@@ -33,8 +36,10 @@ class User {
 		std::string	getUsername(void);
 		void		setUsername(std::string username);
 		std::string	getHostname(void);
+		void		setHostname(std::string hostname);
 		std::string	getRealname(void);
 		void		setRealname(std::string realname);
+		time_t getLoginTime(void);
 		int			getMode(void);
 		void		setMode(int mode);
 		Server		*getServer(void);
@@ -50,6 +55,11 @@ class User {
 
 		void		joinChannel(std::string channel_name);
 		void		leaveChannel(std::string channel_name);
+
+		void		addNickHistory(std::string nickname, time_t nick_update_time);
+		std::map<std::string, time_t>	getNickHistory(void);
+		time_t	getNickUpdateTime(void);
+		void		reNewNickUpdateTime(void);
 
 		void printStatus(void);
 };

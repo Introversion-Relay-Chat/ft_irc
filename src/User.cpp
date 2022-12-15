@@ -7,6 +7,8 @@ User::User(int user_socket, std::string hostname, Server *server) {
 	_server = server;
 	_hostname = hostname;
 	_realname = "";
+	_login_time = time(NULL);
+	_nick_update_time = time(NULL);
 	_last_cmd_time = time(0);
 	_ping_time = time(0);
 }
@@ -31,6 +33,7 @@ void User::setNickname(std::string nickname) {
 	_nickname = nickname;
 }
 
+
 std::string User::getUsername(void) {
 	return _username;
 }
@@ -43,12 +46,20 @@ std::string	User::getHostname(void) {
 	return _hostname;
 }
 
+void		User::setHostname(std::string hostname) {
+	_hostname = hostname;
+}
+
 std::string	User::getRealname(void) {
 	return _realname;
 }
 
 void		User::setRealname(std::string realname) {
 	_realname = realname;
+}
+
+time_t User::getLoginTime(void) {
+	return _login_time;
 }
 
 int User::getMode(void) {
@@ -107,8 +118,24 @@ void User::joinChannel(std::string channel_name){
 	_joined.insert(channel_name);
 }
 
-void User::leaveChannel(std::string channel_name){
+void User::leaveChannel(std::string channel_name) {
 	_joined.erase(channel_name);
+}
+
+std::map<std::string, time_t>	User::getNickHistory(void) {
+	return _nick_history;
+}
+
+void		User::addNickHistory(std::string nickname, time_t nick_update_time) {
+	_nick_history.insert(std::pair<std::string, time_t>(nickname, nick_update_time));
+}
+
+time_t	User::getNickUpdateTime(void) {
+	return _nick_update_time;
+}
+
+void		User::reNewNickUpdateTime(void) {
+	_nick_update_time = time(NULL);
 }
 
 void		User::printStatus(void) {

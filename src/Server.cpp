@@ -21,6 +21,9 @@ Server::Server(std::string port, std::string password) {
 	_executor[std::string("ADMIN")] = ADMIN;
 	_executor[std::string("INFO")] = INFO;
 	_executor[std::string("KILL")] = KILL;
+	_executor[std::string("WHO")] = WHO;
+	_executor[std::string("WHOIS")] = WHOIS;
+	_executor[std::string("WHOWAS")] = WHOWAS;
 	_executor[std::string("PRIVMSG")] = PRIVMSG;
 	_executor[std::string("NOTICE")] = NOTICE;
 	_executor[std::string("PING")] = PING;
@@ -80,16 +83,8 @@ std::string Server::getStartTime(void) {
 	return _start_time;
 }
 
-std::string Server::currTime(void) {
-	time_t curr_time;
-	struct tm *local_time;
-	std::string local_time_str;
-
-	time(&curr_time);
-	local_time = localtime(&curr_time);
-	local_time_str = asctime(local_time);
-	local_time_str.erase(--local_time_str.end());
-	return local_time_str;
+User	*Server::getUserByFd(int fd) {
+	return _users[fd];
 }
 
 void Server::run(bool &stop) {
@@ -236,6 +231,10 @@ void Server::runCommand(const Message &message, User *user) {
 	else {
 		sendMsg(join(user->getServer()->getServername(), "421", user->getNickname(), ERR_UNKNOWNCOMMAND(message.command)), user);
 	}
+	if (DEBUG) {
+		std::cout << "nickname: " << user->getNickname() << std::endl;
+		std::cout << user->getNickHistory() << std::endl;
+	}
 	if (user->getStatus() >= REGISTERED) {
 		user->setLastCmdTime();
 		user->setStatus(REGISTERED);
@@ -286,6 +285,14 @@ void Server::killUser(User *user) {
 		part_message.middle.push_back(*it);
 		_executor["PART"](part_message, user);
 		part_message.middle.pop_back();
+	}
+
+	user->reNewNickUpdateTime();
+	user->addNickHistory(user->getNickname(), user->getNickUpdateTime());
+	user->setNickname("*");
+	if (DEBUG) {
+		std::cout << "nickname: " << user->getNickname() << std::endl;
+		std::cout << user->getNickHistory() << std::endl;
 	}
 	_quitters.push_back(user->getUserSocket());
 }

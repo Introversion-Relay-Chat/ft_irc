@@ -44,39 +44,81 @@ std::ostream& operator<<(std::ostream& os, const Message& message) {
 	return os;
 }
 
-bool isIncluded(std::string ban, std::string user) {
-	size_t u = 0, i = 0;
+std::ostream& operator<<(std::ostream& os, const std::map<std::string, time_t>& nick_history) {
+	std::cout << "nickname history: " << std::endl;
+	for (std::map<std::string, time_t>::const_iterator pn = nick_history.begin(); pn != nick_history.end(); pn++) {
+		os << "|" << pn->first << "|" << " update_time: " << pn->second << std::endl;
+	}
+	return os;
+}
 
-	while (i < ban.length()) {
-		if (ban[i] == '*') {
-			while (++i < ban.length()) {
-				if (!(ban[i] == '*' || ban[i] == '?')) {
-					break;
-				}
-			}
-			if (i == ban.length()) {
+std::string currTime(void) {
+	time_t curr_time;
+	struct tm *local_time;
+	std::string local_time_str;
+
+	time(&curr_time);
+	local_time = localtime(&curr_time);
+	local_time_str = asctime(local_time);
+	local_time_str.erase(--local_time_str.end());
+	return local_time_str;
+}
+
+// bool isIncluded(std::string pattern, std::string target) {
+// 	size_t u = 0, i = 0;
+
+// 	while (i < pattern.length()) {
+// 		if (pattern[i] == '*') {
+// 			while (++i < pattern.length()) {
+// 				if (!(pattern[i] == '*' || pattern[i] == '?')) {
+// 					break;
+// 				}
+// 			}
+// 			if (i == pattern.length()) {
+// 				return true;
+// 			}
+// 			while (pattern[i] != target[u]) {
+// 				if (u == target.length()) {
+// 					return false;
+// 				}
+// 				u++;
+// 			}
+// 		} else if (pattern[i] == '?') {
+// 			if (u == target.length()) {
+// 				return false;
+// 			}
+// 			u++;
+// 		} else {
+// 			if (u == target.length() || pattern[i] != target[u]) {
+// 				return false;
+// 			}
+// 			u++;
+// 		}
+// 		i++;
+// 	}
+// 	return true;
+// }
+
+bool confirmMatch(std::string pattern, std::string target) {
+	size_t cur = 0;
+	while (cur < target.length() && cur < pattern.length()
+	&& (pattern[cur] == '?' || pattern[cur] == target[cur])) {
+		++cur;
+	}
+
+	if (cur == pattern.length()) {
+		return cur == target.size();
+	}
+
+	if (pattern[cur] == '*') {
+		for (size_t i = 0; cur + i <= target.length(); ++i)
+		{
+			if (confirmMatch(pattern.substr(cur + 1), target.substr(cur + i))) {
 				return true;
 			}
-			while (ban[i] != user[u]) {
-				if (u == user.length()) {
-					return false;
-				}
-				u++;
-			}
-		} else if (ban[i] == '?') {
-			if (u == user.length()) {
-				return false;
-			}
-			u++;
-		} else {
-			if (u == user.length() || ban[i] != user[u]) {
-				return false;
-			}
-			u++;
 		}
-		i++;
 	}
-	return true;
+	return false;
 }
 
 bool checkMask(std::set<std::string> banlist, std::string prefix) {
@@ -89,7 +131,8 @@ bool checkMask(std::set<std::string> banlist, std::string prefix) {
 	for (std::set<std::string>::iterator it = banlist.begin();it != banlist.end();it++) {
 		bannick = (*it).substr(0, (*it).find("!", 0));
 		banuser = (*it).substr((*it).find("!", 0) + 1);
-		if (isIncluded(bannick, nickname) && isIncluded(banuser, banuser)) {
+		if (confirmMatch(bannick, nickname) && confirmMatch(bannick, username)) {
+		// if (isIncluded(bannick, nickname) && isIncluded(banuser, banuser)) {
 			return true;
 		}
 	}

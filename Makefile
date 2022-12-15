@@ -35,6 +35,9 @@ FUNC			=	main \
 					Commands/ADMIN \
 					Commands/INFO \
 					Commands/KILL \
+					Commands/WHO \
+					Commands/WHOIS \
+					Commands/WHOWAS \
 					Commands/PRIVMSG \
 					Commands/NOTICE \
 					Commands/PING \
