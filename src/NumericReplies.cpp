@@ -1,5 +1,10 @@
 #include "../include/Utils.hpp"
 
+// 001
+std::string RPL_WELCOME(void) {
+	return "Welcome to the Introversion-Relay-Chat";
+}
+
 // 221
 std::string RPL_UMODEIS(const std::string &mode) {
 	return mode;

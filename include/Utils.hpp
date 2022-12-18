@@ -104,6 +104,7 @@ std::string PING(const Message &message, User *sender);
 std::string PONG(const Message &message, User *sender);
 
 // Numeric Replies
+std::string RPL_WELCOME(void);
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
 std::string RPL_TRACECONNECTING(const std::string &server);
 std::string RPL_TRACEHANDSHAKE(const std::string &server);
