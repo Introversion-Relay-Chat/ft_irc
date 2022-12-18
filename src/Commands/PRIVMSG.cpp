@@ -30,12 +30,13 @@ std::string PRIVMSG(const Message &message, User *sender) {
 						continue;
 					}
 				}
-				std::vector<std::string> user_list = split(channel->getUserList(sender), " ");
-				for (std::vector<std::string>::iterator it2 = user_list.begin();it2 != user_list.end();it2++) {
-					if ((*it2)[0] == '@') {
-						(*it2).erase((*it2).begin());
+				std::set<int> user_fds = channel->getUsers();
+				for (std::set<int>::iterator it2 = user_fds.begin(); it2 != user_fds.end(); ++it2)
+				{
+					User *user = sender->getServer()->getUserByFd(*it2);
+					if (user && user->getNickname() != sender->getNickname()) {
+						sender->getServer()->sendMsg(join(sender_prefix, "PRIVMSG", *it, ":" + message.trailing), user);
 					}
-					responses.push_back(make_pair("301", *it2));
 				}
 			}
 		} else {//user
@@ -54,7 +55,7 @@ std::string PRIVMSG(const Message &message, User *sender) {
 			sender->getServer()->sendMsg(join(server_prefix, "404", target, ERR_CANNOTSENDTOCHAN(it->second)), sender);
 		} else {
 			User *user = sender->getServer()->getUserByName(it->second);
-			sender->getServer()->sendMsg(join(sender_prefix, "301", user->getNickname(), RPL_AWAY(user->getNickname(), message.trailing)), user);
+			sender->getServer()->sendMsg(join(sender_prefix, "PRIVMSG", user->getNickname(), ":" + message.trailing), user);
 		}
 	}
 	return std::string();
