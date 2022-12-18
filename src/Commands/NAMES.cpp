@@ -46,7 +46,7 @@ std::string NAMES(const Message &message, User *sender) {
 		if (!user_channels.empty()) {
 			for (chan_it=user_channels.begin(); chan_it!=user_channels.end(); chan_it++) {
 				channel = sender->getServer()->getChannelByName(*chan_it);
-				if (channel->checkVisible(sender)) {
+				if (!channel->checkVisible(sender)) {
 					continue ;
 				}
 				break ;
