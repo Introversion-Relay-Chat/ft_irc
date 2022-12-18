@@ -10,7 +10,7 @@ std::string KILL(const Message &message, User *sender) {
 	if (message.middle.size() < 2) {
 		return join(sender_prefix, "461", target, ERR_NEEDMOREPARAMS(message.command));
 	}
-	
+
 	// ERR_NOPRIVILEGES
 	if (!(sender->getMode() & FLAG_USER_O)) {
 		return join(sender_prefix, "481", target, ERR_NOPRIVILEGES());
@@ -30,5 +30,9 @@ std::string KILL(const Message &message, User *sender) {
 
 	sender->getServer()->killUser(user);
 
+	sender->getServer()->sendMsg(
+		join(sender_prefix, "361", nickname, RPL_KILLDONE(nickname)),
+		user
+	);
 	return std::string();
 }

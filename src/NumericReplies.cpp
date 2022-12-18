@@ -128,6 +128,11 @@ std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist
 	return channel + " :" + userlist;
 }
 
+// 361
+std::string RPL_KILLDONE(const std::string &nickname) {
+	return nickname + " :have been killed!";
+}
+
 // 366
 std::string RPL_ENDOFNAMES(const std::string &channel) {
 	return channel + " :End of /NAMES list";
