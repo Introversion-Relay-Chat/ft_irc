@@ -80,7 +80,9 @@ std::string MODE(const Message &message, User *sender) {
 						}
 						else if (sign == '-') {
 							channel->removeOperator(user);
-							channel->setMode(channel->getMode() & ~FLAG_CHANNEL_O);
+							if (channel->getOperators().empty()) {
+								channel->setMode(channel->getMode() & ~FLAG_CHANNEL_O);
+							}
 						}
 					}
 					break ;
