@@ -28,6 +28,9 @@ std::string NICK(const Message &message, User *sender) {
 	sender->reNewNickUpdateTime();
 	sender->addNickHistory(sender->getNickname(), sender->getNickUpdateTime());
 	sender->setNickname(nickname);
+	if (sender->getStatus() == REGISTERED) {
+		return join(sender_prefix, "001", sender->getNickname(), sender->getNickname() + ": Nickname change success!");
+	}
 
 	if (sender->getStatus() == NEED_NICKNAME) {
 		sender->setStatus(NEED_USERREGISTER);
