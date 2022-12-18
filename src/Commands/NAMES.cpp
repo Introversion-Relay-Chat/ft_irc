@@ -39,21 +39,23 @@ std::string NAMES(const Message &message, User *sender) {
 	userlist = std::string();
 	for (std::map<int, User *>::iterator it=server_users.begin(); it!=server_users.end(); it++) {
 		user = (*it).second;
-		if (user->getMode() & FLAG_USER_I || !user_channels.empty()) {
+		user_channels = user->getJoinedChannels();
+		if (user->getMode() & FLAG_USER_I) {
 			continue ;
 		}
-		
-		user_channels = user->getJoinedChannels();
-		for (chan_it=user_channels.begin(); chan_it!=user_channels.end(); chan_it++) {
-			channel = sender->getServer()->getChannelByName(*chan_it);
-			if (channel->checkVisible(sender)) {
-				continue ;
+		if (!user_channels.empty()) {
+			for (chan_it=user_channels.begin(); chan_it!=user_channels.end(); chan_it++) {
+				channel = sender->getServer()->getChannelByName(*chan_it);
+				if (!channel->checkVisible(sender)) {
+					continue ;
+				}
+				break ;
 			}
-			break ;
+			if (chan_it != user_channels.end()) {
+				continue;
+			}
 		}
-		if (chan_it == user_channels.end()) {
-			userlist += user->getNickname() + " ";
-		}
+		userlist += user->getNickname() + " ";
 	}
 	// RPL_NAMREPLY
 	sender->getServer()->sendMsg(join(sender_prefix, "353", target, RPL_NAMREPLY("*", userlist)), sender);

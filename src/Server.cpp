@@ -64,7 +64,10 @@ User *Server::getUserByName(std::string nickname) {
 }
 
 Channel *Server::getChannelByName(std::string channel_name) {
-	return _channels[channel_name];
+	if (_channels.find(channel_name) != _channels.end()) {
+		return _channels[channel_name];
+	}
+	return NULL;
 }
 
 std::vector<std::string> Server::getChannelNames(void) {
@@ -84,7 +87,10 @@ std::string Server::getStartTime(void) {
 }
 
 User	*Server::getUserByFd(int fd) {
-	return _users[fd];
+	if (_users.find(fd) != _users.end()) {
+		return _users[fd];
+	}
+	return NULL;
 }
 
 void Server::run(bool &stop) {
