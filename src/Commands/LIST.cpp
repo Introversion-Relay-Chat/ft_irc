@@ -19,11 +19,11 @@ std::string LIST(const Message &message, User *sender) {
 	sender->getServer()->sendMsg(join(sender_prefix, "321", target, RPL_LISTSTART()), sender);
 	for (unsigned long i=0; i < channels.size(); i++){
 		channel = sender->getServer()->getChannelByName(channels[i]);
-		visible = toString(channel->getVisibleUsers(sender));
-		topic = channel->getTopic();
 		if (!channel) {
 			continue ;
 		}
+		visible = toString(channel->getVisibleUsers(sender));
+		topic = channel->getTopic();
 
 		// Secret
 		if (channel->getMode() & FLAG_CHANNEL_S) {
