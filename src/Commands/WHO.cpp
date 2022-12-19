@@ -1,7 +1,7 @@
 #include "../../include/Utils.hpp"
 
 bool isInSameChannel(const std::set<std::string> &channels, const std::set<std::string> &target_channels) {
-	if (channels.size() == 0 && target_channels.size() == 0) {
+	if (channels.size() == 0 || target_channels.size() == 0) {
 		return false;
 	}
 	std::vector<std::string> common_channels;
@@ -32,7 +32,7 @@ std::string WHO(const Message &message, User *sender) {
 	// name이 주어지지 않았거나 '0'이나 '*'로 주어진 경우 모든 visible한 리스트를 보여준다.
 	// sender와 공통 채널이 없고, +i user mode가 아니라면 visible한 유저이다.
 	// 1. 서버에 존재하는 모든 유저를 하나씩 확인한다.
-	// 2. +i mode인 유저, 채널에 가입하지 않은 유저 필터링
+	// 2. +i mode인 유저 필터링
 	// 3. sender와 공통 채널인 유저 필터링
 	// 4. visible한 유저의 정보를 RPL_WHOREPLY로 응답한다.
 	if (message.middle.size() < 1 || (message.middle.size() == 1 && (message.middle[0] == "*" || message.middle[0] == "0"))) {
@@ -41,11 +41,13 @@ std::string WHO(const Message &message, User *sender) {
 		for (std::map<int, User *>::iterator it = users.begin(); it != users.end(); it++) {
 			User *target_user = it->second;
 			std::set<std::string> target_joined_channels = target_user->getJoinedChannels();
-			if (target_user->getMode() & FLAG_USER_I) {
-				continue;
-			}
-			if (isInSameChannel(target_joined_channels, sender->getJoinedChannels())) {
-				continue;
+			if (sender->getNickname() != target_user->getNickname()) {
+				if (target_user->getMode() & FLAG_USER_I) {
+					continue;
+				}
+				if (isInSameChannel(target_joined_channels, sender->getJoinedChannels())) {
+					continue;
+				}
 			}
 			server->sendMsg(
 						join(sender_prefix, "352", sender->getNickname(),
