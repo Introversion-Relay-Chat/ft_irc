@@ -53,14 +53,14 @@ std::string WHOWAS(const Message &message, User *sender) {
 		}
 	}
 
-	// results를 second 기준으로 내림차순 정렬
-	std::vector<std::pair<UserName *, time_t> > sorted_results(results.begin(), results.end());
-	std::sort(sorted_results.begin(), sorted_results.end(), comp);
-
 	// nickname 히스토리가 존재하지 않는 경우, 401 ERR_NOSUCHNICK
 	if (results.size() == 0) {
 		return join(sender_prefix, "401", sender->getNickname(), ERR_NOSUCHNICK(search_nickname));
 	}
+
+	// results를 second 기준으로 내림차순 정렬
+	std::vector<std::pair<UserName *, time_t> > sorted_results(results.begin(), results.end());
+	std::sort(sorted_results.begin(), sorted_results.end(), comp);
 
 	// 정렬된 결과를 순회하며 314 RPL_WHOWASUSER, 312 WHOISSERVER를 응답
 	int i = 0;
@@ -80,7 +80,9 @@ std::string WHOWAS(const Message &message, User *sender) {
 				), sender);
 		++i;
 	}
-
+	for (std::map<UserName *, time_t>::iterator it = results.begin(); it != results.end(); it++) {
+		delete it->first;
+	}
 	// 369 RPL_ENDOFWHOWAS
 	return join(sender_prefix, "369", sender->getNickname(), RPL_ENDOFWHOWAS(search_nickname));
 }
