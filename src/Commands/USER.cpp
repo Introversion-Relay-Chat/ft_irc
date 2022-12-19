@@ -18,5 +18,5 @@ std::string USER(const Message &message, User *sender) {
 	if (sender->getStatus() == NEED_USERREGISTER) {
 		sender->setStatus(REGISTERED);
 	}
-	return std::string();
+	return join(sender_prefix, "001", sender->getNickname(), RPL_WELCOME());
 }

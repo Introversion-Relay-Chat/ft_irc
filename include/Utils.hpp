@@ -104,6 +104,7 @@ std::string PING(const Message &message, User *sender);
 std::string PONG(const Message &message, User *sender);
 
 // Numeric Replies
+std::string RPL_WELCOME(void);
 std::string RPL_TRACELINK(const std::string &version, const std::string &debuglevel, const std::string &server, const std::string &nextserver, const std::string &info);
 std::string RPL_TRACECONNECTING(const std::string &server);
 std::string RPL_TRACEHANDSHAKE(const std::string &server);
@@ -160,6 +161,7 @@ std::string RPL_WHOREPLY(const std::string &channel, const std::string &user, co
 std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist);
 std::string RPL_LINKS(const std::string &mask, const std::string &server, const std::string &hopcount, const std::string &serverinfo);
 std::string RPL_ENDOFLINKS(const std::string &mask);
+std::string RPL_KILLDONE(const std::string &nickname);
 std::string RPL_ENDOFNAMES(const std::string &channel);
 std::string RPL_BANLIST(const std::string &channel, const std::string &banmask);
 std::string RPL_ENDOFBANLIST(const std::string &channel);

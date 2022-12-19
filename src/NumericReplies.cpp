@@ -1,5 +1,10 @@
 #include "../include/Utils.hpp"
 
+// 001
+std::string RPL_WELCOME(void) {
+	return "Welcome to the Introversion-Relay-Chat";
+}
+
 // 221
 std::string RPL_UMODEIS(const std::string &mode) {
 	return mode;
@@ -121,6 +126,11 @@ std::string RPL_WHOREPLY(const std::string &channel, const std::string &user, co
 // 353
 std::string RPL_NAMREPLY(const std::string &channel, const std::string &userlist) {
 	return channel + " :" + userlist;
+}
+
+// 361
+std::string RPL_KILLDONE(const std::string &nickname) {
+	return nickname + " :have been killed!";
 }
 
 // 366

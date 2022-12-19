@@ -23,19 +23,27 @@ std::string TOPIC(const Message &message, User *sender) {
 	if (!channel->checkOnChannel(sender)) {
 		return join(sender_prefix, "442", target, ERR_NOTONCHANNEL(channel_name));
 	}
-
 	if (message.trailing.length() > 0) {
 		topic = message.trailing;
 		// ERR_CHANOPRIVSNEEDED
 		if (channel->getMode() & FLAG_CHANNEL_T && !channel->checkPrivilege(sender)) {
 			return join(sender_prefix, "482", target, ERR_CHANOPRIVSNEEDED(channel_name));
 		}
+		if (topic[0] == ':') {
+			topic.erase(0, 1);
+		}
 		channel->setTopic(topic);
+		if (topic.length() > 0) {
+			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_TOPIC(channel_name, topic)), sender);
+		}
+		else {
+			sender->getServer()->sendMsg(join(sender_prefix, "331", target, RPL_NOTOPIC(channel_name)), sender);
+		}
 	}
 	else {
 		topic = channel->getTopic();
 		// RPL_TOPIC
-		if (topic.length()) {
+		if (topic.length() > 0) {
 			sender->getServer()->sendMsg(join(sender_prefix, "332", target, RPL_TOPIC(channel_name, topic)), sender);
 		}
 		else {
