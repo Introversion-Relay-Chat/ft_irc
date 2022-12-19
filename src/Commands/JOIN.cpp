@@ -23,6 +23,9 @@ std::string JOIN(const Message &message, User *sender) {
 	}
 
 	for (unsigned long i=0; i < channels.size(); i++){
+		if (channels[i][0] != '#') {
+			continue ;
+		}
 		channel = sender->getServer()->getChannelByName(channels[i]);
 		if (!channel) {
 			// ERR_TOOMANYCHANNELS
@@ -63,10 +66,6 @@ std::string JOIN(const Message &message, User *sender) {
 				sender->getServer()->sendMsg(join(sender_prefix, "475", target, ERR_BADCHANNELKEY(channels[i])), sender);
 				continue ;
 			}
-		}
-
-		if (channels[i][0] != '#') {
-			continue ;
 		}
 		channel->addUser(sender);
 		sender->joinChannel(channels[i]);

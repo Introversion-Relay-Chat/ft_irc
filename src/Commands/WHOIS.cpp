@@ -62,7 +62,6 @@ void	WHOISONE(std::string sender_prefix, std::string nickname, User *sender, Ser
 				join(sender_prefix, "318", sender->getNickname(),
 				RPL_ENDOFWHOIS(nickname)
 				), sender);
-		return ;
 		}
 	}
 	server->sendMsg(

@@ -34,8 +34,12 @@ Server::Server(std::string port, std::string password) {
 }
 
 Server::~Server() {
-	_users.clear();
-	_channels.clear();
+	for (std::map<std::string, Channel *>::iterator it=_channels.begin(); it!=_channels.end(); it++) {
+		delete _channels[it->first];
+	}
+	for (std::map<int, User *>::iterator it=_users.begin(); it!=_users.end(); it++) {
+		delete _users[it->first];
+	}
 }
 
 std::string Server::getPassword(void) {
@@ -147,7 +151,7 @@ void Server::loop(void) {
 		}
 		else if (user->getStatus() == NEED_PONG) {
 			if (now - user->getPingTime() > TIMEOUT) {
-				_quitters.push_back(user->getUserSocket());
+				killUser(user);
 			}
 		}
 	}
@@ -291,14 +295,6 @@ void Server::killUser(User *user) {
 		part_message.middle.push_back(*it);
 		_executor["PART"](part_message, user);
 		part_message.middle.pop_back();
-	}
-
-	user->reNewNickUpdateTime();
-	user->addNickHistory(user->getNickname(), user->getNickUpdateTime());
-	user->setNickname("*");
-	if (DEBUG) {
-		std::cout << "nickname: " << user->getNickname() << std::endl;
-		std::cout << user->getNickHistory() << std::endl;
 	}
 	_quitters.push_back(user->getUserSocket());
 }
